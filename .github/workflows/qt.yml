@@ -1,0 +1,117 @@
+name: Qt Pulse App
+
+on:
+  push:
+    paths:
+      - 'apps/qt/**'
+      - '.github/workflows/qt.yml'
+  pull_request:
+    paths:
+      - 'apps/qt/**'
+      - '.github/workflows/qt.yml'
+  workflow_dispatch:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 3.1.25
+          actions-cache-folder: 'emsdk-cache'
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.5.3'
+          host: 'linux'
+          target: 'desktop'
+          arch: 'wasm_32'
+          cache: true
+      - name: Build WebAssembly
+        working-directory: apps/qt
+        run: |
+          mkdir build && cd build
+          qt-cmake -DCMAKE_BUILD_TYPE=Release ..
+          make -j$(nproc)
+      - name: Upload Web Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qt-web
+          path: apps/qt/build/PulseApp
+          retention-days: 30
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 3.1.25
+          actions-cache-folder: 'emsdk-cache'
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.5.3'
+          host: 'linux'
+          target: 'android'
+          arch: 'android_armv7'
+          cache: true
+      - name: Build Android
+        working-directory: apps/qt
+        run: |
+          mkdir build && cd build
+          qt-cmake -DCMAKE_BUILD_TYPE=Release -DQT_ANDROID_ABIS="armeabi-v7a;arm64-v8a" ..
+          make -j$(nproc)
+          make apk
+        continue-on-error: true
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qt-android
+          path: apps/qt/build/android-build/build/outputs/apk/release/*.apk
+          retention-days: 30
+        continue-on-error: true
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup emsdk
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 3.1.25
+          actions-cache-folder: 'emsdk-cache'
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.5.3'
+          host: 'windows'
+          target: 'desktop'
+          arch: 'win64_msvc2019_64'
+          cache: true
+      - name: Build Windows
+        working-directory: apps/qt
+        run: |
+          mkdir build
+          cd build
+          cmake -G "Visual Studio 17 2022" -A x64 -DCMAKE_PREFIX_PATH="$env:IQTA_TOOLS\Qt\6.5.3\msvc2019_64" -DCMAKE_BUILD_TYPE=Release ..
+          cmake --build . --config Release
+          cpack -G ZIP
+        continue-on-error: true
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: qt-windows
+          path: apps/qt/build/*.zip
+          retention-days: 30
+        continue-on-error: true
