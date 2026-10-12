@@ -5,7 +5,7 @@ Version used: 1.8.0 · Language: Rust · Rendering model: own canvas (Femtovg / 
 | Target | Status | Notes |
 |---|---|---|
 | Web | ✅ | Compiled to WASM via `cargo build --target wasm32-unknown-unknown` |
-| Android | ⏭️ | Skipped due to complexity of headless Android SDK setup in this environment. Slint provides an android template via `cargo apk` or `cargo-ndk`. |
+| Android | ✅ | Built in CI (arm64 APK, debug-signed release) with `cargo-apk` + Slint `backend-android-activity-06`; app lives in `src/lib.rs` (`android_main` entry). **Built only: not yet run on a device/emulator, so every capability above is unverified on mobile** (touch drag C08, IME/text field C15, safe-area/status-bar, and performance in particular). |
 | Windows | ✅ | Compiled to native Windows executable. |
 
 ## Capabilities (see spec/DESIGN.md §9)

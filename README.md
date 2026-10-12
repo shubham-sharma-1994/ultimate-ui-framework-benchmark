@@ -36,7 +36,7 @@ Targets: ✅ built · ⚠️ partial / experimental (CI job marked non-blocking)
 | Dioxus ⚠️ | `apps/dioxus` | ✅ | ⏭️ | ✅ | 12 | 6 | 0 | [NOTES](apps/dioxus/NOTES.md) · [FEEDBACK](apps/dioxus/FEEDBACK.md) |
 | Fyne | `apps/fyne` | ⚠️ | ✅ | ✅ | 1 | 9 | 8 | [NOTES](apps/fyne/NOTES.md) · [FEEDBACK](apps/fyne/FEEDBACK.md) |
 | Tauri | `apps/tauri` | ✅ | ⚠️ | ✅ | 16 | 2 | 0 | [NOTES](apps/tauri/NOTES.md) · [FEEDBACK](apps/tauri/FEEDBACK.md) |
-| Slint | `apps/slint` | ✅ | ⏭️ | ✅ | 4 | 10 | 4 | [NOTES](apps/slint/NOTES.md) · [FEEDBACK](apps/slint/FEEDBACK.md) |
+| Slint | `apps/slint` | ✅ | ✅ | ✅ | 4 | 10 | 4 | [NOTES](apps/slint/NOTES.md) · [FEEDBACK](apps/slint/FEEDBACK.md) |
 | Electron | `apps/electron` | ✅ | ⏭️ | ✅ | 16 | 2 | 0 | [NOTES](apps/electron/NOTES.md) · [FEEDBACK](apps/electron/FEEDBACK.md) |
 | Quasar | `apps/quasar` | ✅ | ✅ | ✅ | 18 | 0 | 0 | [NOTES](apps/quasar/NOTES.md) · [FEEDBACK](apps/quasar/FEEDBACK.md) |
 
@@ -54,7 +54,7 @@ Rule added to [`spec/COMPAT.md`](spec/COMPAT.md): skip a hard *feature*, not the
 | Uno | Real Composition spring + number-switcher animations | Animated theme switch (C14) skipped |
 | MAUI | Hover/keyboard handling, hero overlay, tick-based spring | Web (no target); Windows CI non-blocking |
 | Dioxus | Full app replaced the stub | NOTES.md not rewritten; Android not confirmed |
-| Slint | – (session produced no PR) | Android, real dialogs/sheets, web deep link, test IDs, hero flight |
+| Slint | – (session produced no PR; Android done by hand, built in CI, untested on device) | Real dialogs/sheets, web deep link, test IDs, hero flight |
 | Fyne | – (session failed twice) | Staggered list, number switcher, shimmer, spring, swipe, parallax, hero, deep link |
 
 Still skipped by design (whole platform): MAUI Web, Electron Android, React Native Windows.

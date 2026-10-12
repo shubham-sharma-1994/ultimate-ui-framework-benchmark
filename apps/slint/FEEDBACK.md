@@ -27,3 +27,9 @@ Building the Pulse app in Slint was a unique experience that highlights both the
 - Missing advanced animation primitives (stagger, spring physics, shared elements).
 - Limited gesture recognition compared to Flutter or React Native.
 - Smaller ecosystem of pre-built complex components (like floating label inputs, bottom sheets).
+
+## Android (added after the Android build was done by hand)
+- **Setup**: the app has to be a library (`crate-type = ["cdylib", "rlib"]`) with an `android_main(AndroidApp)` entry that calls `slint::android::init` and then the shared `run()`. Enable the `backend-android-activity-06` feature for the android target only. `cargo-apk` then builds and signs the APK; no Gradle project is needed.
+- **Bug found**: the original `main()` built the UI but never called `app.run()`, so the desktop window closed immediately. This was fixed in the shared `run()`.
+- **Gotchas**: `cargo-apk` does not expand `$HOME` in the keystore path (use a path relative to the crate). Adding a lib target next to the bin makes `trunk` refuse to build the web version until you pin `data-bin`. The edition-2024 form `#[unsafe(no_mangle)]` is required on the entry point.
+- **Caveat**: only built in CI, not yet exercised on a device, so mobile behaviour (touch, text input, performance) is unknown.
