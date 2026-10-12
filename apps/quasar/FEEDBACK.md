@@ -28,3 +28,8 @@ Building the Pulse app using Quasar was a generally smooth experience, particula
 - Lacks native API for complex route transitions (like Hero shared elements).
 - Spring animations require custom implementations or third-party dependencies.
 - Relies on Webview performance, inheriting the usual DOM-based rendering limitations on mobile.
+
+## Round 2
+- When scaffolding an app with Quasar's Vite plugin for the web (`vite build`), adding Quasar CLI's Electron build mode (`quasar build -m electron`) natively risks corrupting the original web setup since Quasar CLI relies on a specific `src/boot` project architecture. Instead, an extremely robust alternative is to wrap the resulting web `dist/` inside a standalone Electron shell using `electron` and `electron-builder`. This strategy cleanly achieves both the SPA build and the Windows binary output with no cross-contamination.
+- View Transitions API works well for simulating shared element transitions, removing the need for hacking complex Vue Router behaviors, although it still isn't true component-level sharing.
+- Adding real JS spring physics is completely straightforward by bypassing Vue/CSS transitions and calculating the velocity/acceleration loop manually via `requestAnimationFrame`. Vue reactivity easily updates the transform values during the animation frame.

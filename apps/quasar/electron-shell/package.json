@@ -1,0 +1,27 @@
+{
+  "name": "pulse-quasar-electron",
+  "version": "1.0.0",
+  "description": "Quasar Electron Shell",
+  "main": "main.js",
+  "scripts": {
+    "build": "electron-builder -w"
+  },
+  "build": {
+    "appId": "pulse-quasar",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "../dist/**/*"
+    ],
+    "win": {
+      "target": ["zip"]
+    }
+  },
+  "devDependencies": {
+    "electron": "^44.7.0",
+    "electron-builder": "^26.15.3"
+  }
+}

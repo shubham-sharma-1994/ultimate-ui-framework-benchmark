@@ -133,7 +133,10 @@
               <q-item-section avatar>
                 <div
                   class="item-thumbnail hero-thumbnail"
-                  :style="`background: linear-gradient(135deg, ${item.colors[0]}, ${item.colors[1]})`"
+                  :style="[
+                    `background: linear-gradient(135deg, ${item.colors[0]}, ${item.colors[1]})`,
+                    activeHeroId === item.id ? { viewTransitionName: 'hero-thumbnail' } : {}
+                  ]"
                 ></div>
               </q-item-section>
 
@@ -154,7 +157,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import data from '../data.json'
 import { useQuasar } from 'quasar'
@@ -207,8 +210,16 @@ onMounted(() => {
   }, 100)
 })
 
-const goToDetail = (id) => {
-  router.push(`/detail/${id}`)
+const activeHeroId = ref(null)
+
+const goToDetail = async (id) => {
+  activeHeroId.value = id
+  await nextTick()
+  if (document.startViewTransition) {
+    document.startViewTransition(() => router.push(`/detail/${id}`))
+  } else {
+    router.push(`/detail/${id}`)
+  }
 }
 </script>
 

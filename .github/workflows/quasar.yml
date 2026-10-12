@@ -114,14 +114,14 @@ jobs:
         run: pnpm install --ignore-scripts
 
       - name: Build Windows
-        working-directory: apps/quasar
+        working-directory: apps/quasar/electron-shell
         run: |
-          echo "Windows build with Electron is skipped natively by default as we used SPA template"
-          echo "Skipped" > skipped.txt
+          pnpm install
+          pnpm build
 
       - name: Upload Windows Artifact
         uses: actions/upload-artifact@v4
         with:
           name: quasar-windows
-          path: apps/quasar/skipped.txt
+          path: apps/quasar/electron-shell/dist/*.zip
           retention-days: 30
