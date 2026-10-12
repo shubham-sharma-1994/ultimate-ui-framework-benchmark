@@ -35,5 +35,5 @@ target_sdk_version = 34
 label = "Pulse"
 
 [package.metadata.android.signing.release]
-path = "$HOME/.android/debug.keystore"
+path = "debug.keystore"
 keystore_password = "android"
