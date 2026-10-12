@@ -111,6 +111,14 @@ jobs:
           APK=$(find apps/slint/target -name '*.apk' | head -1)
           test -n "$APK" || { echo "no APK produced"; exit 1; }
           cp "$APK" out/app-slint.apk
+      - name: Inspect APK (diagnostics)
+        continue-on-error: true
+        run: |
+          BT=$(ls -d /usr/local/lib/android/sdk/build-tools/* | sort -V | tail -1)
+          echo "== badging"; "$BT/aapt2" dump badging out/app-slint.apk | head -30
+          echo "== manifest"; "$BT/aapt2" dump xmltree --file AndroidManifest.xml out/app-slint.apk
+          echo "== zip"; unzip -v out/app-slint.apk
+          echo "== signature"; "$BT/apksigner" verify --verbose --print-certs out/app-slint.apk | head -12
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
