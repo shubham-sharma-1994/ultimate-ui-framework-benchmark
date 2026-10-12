@@ -13,14 +13,18 @@ path = "src/main.rs"
 [dependencies]
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
-slint = { version = "1.8.0", features = ["serde"] }
 
 [build-dependencies]
 slint-build = "1.8.0"
 
-# Android: Slint's android-activity backend (entry point is `android_main` in src/lib.rs)
+# Desktop + web: Slint defaults (GPU renderer where available)
+[target.'cfg(not(target_os = "android"))'.dependencies]
+slint = { version = "1.8.0", features = ["serde"] }
+
+# Android: Slint's android-activity backend (entry point is `android_main` in src/lib.rs).
+# Software renderer only: the default OpenGL (femtovg) path showed a blank white window on a real device.
 [target.'cfg(target_os = "android")'.dependencies]
-slint = { version = "1.8.0", features = ["serde", "backend-android-activity-06"] }
+slint = { version = "1.8.0", default-features = false, features = ["std", "compat-1-2", "serde", "backend-android-activity-06", "renderer-software"] }
 
 [package.metadata.android]
 package = "dev.pulse.slint"
