@@ -73,11 +73,13 @@ jobs:
         working-directory: apps/ionic/android
         run: ./gradlew assembleRelease
 
+      - name: Sign APK (shared debug key, so it installs)
+        run: bash scripts/sign-apk.sh "$(ls apps/ionic/android/app/build/outputs/apk/release/app-release-unsigned.apk | head -1)" signed/pulse-ionic.apk
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
           name: ionic-android
-          path: apps/ionic/android/app/build/outputs/apk/release/app-release-unsigned.apk
+          path: signed/pulse-ionic.apk
           retention-days: 30
 
   build-windows:

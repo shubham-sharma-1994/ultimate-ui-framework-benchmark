@@ -6,7 +6,7 @@ using Avalonia.Android;
 namespace Pulse.Android;
 
 [Activity(
-    Label = "Pulse.Android",
+    Label = "Pulse Avalonia",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,

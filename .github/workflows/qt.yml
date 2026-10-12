@@ -91,11 +91,14 @@ jobs:
           ninja
           cmake --build . --target apk
         continue-on-error: true
+      - name: Sign APK (shared debug key, so it installs)
+        run: bash scripts/sign-apk.sh "$(ls apps/qt/build/android-build/build/outputs/apk/release/*.apk | head -1)" signed/pulse-qt.apk
+        continue-on-error: true
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
           name: qt-android
-          path: apps/qt/build/android-build/build/outputs/apk/release/*.apk
+          path: signed/pulse-qt.apk
           retention-days: 30
         continue-on-error: true
 

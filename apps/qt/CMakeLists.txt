@@ -18,6 +18,8 @@ qt_add_executable(PulseAppExe
     src/main.cpp
 )
 
+set_target_properties(PulseAppExe PROPERTIES QT_ANDROID_PACKAGE_NAME "dev.pulse.qt")
+
 qt_add_qml_module(PulseAppExe
     URI PulseAppExe
     VERSION 1.0

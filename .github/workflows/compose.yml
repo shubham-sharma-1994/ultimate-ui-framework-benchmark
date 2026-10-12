@@ -40,10 +40,12 @@ jobs:
       - uses: gradle/gradle-build-action@v2
       - name: Build Android
         run: cd apps/compose && ./gradlew assembleRelease
+      - name: Sign APK (shared debug key, so it installs)
+        run: bash scripts/sign-apk.sh "$(ls apps/compose/composeApp/build/outputs/apk/release/composeApp-release-unsigned.apk | head -1)" signed/pulse-compose.apk
       - uses: actions/upload-artifact@v4
         with:
           name: compose-android
-          path: apps/compose/composeApp/build/outputs/apk/release/composeApp-release-unsigned.apk
+          path: signed/pulse-compose.apk
           retention-days: 30
 
   windows:

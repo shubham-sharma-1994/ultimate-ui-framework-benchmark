@@ -6,9 +6,9 @@
     <UnoSingleProject>true</UnoSingleProject>
 
     <!-- Display name -->
-    <ApplicationTitle>UnoPulse</ApplicationTitle>
+    <ApplicationTitle>Pulse Uno</ApplicationTitle>
     <!-- App Identifier -->
-    <ApplicationId>com.companyname.unopulse</ApplicationId>
+    <ApplicationId>dev.pulse.uno</ApplicationId>
     <!-- Versions -->
     <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>

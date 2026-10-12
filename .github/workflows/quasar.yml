@@ -84,11 +84,13 @@ jobs:
         working-directory: apps/quasar/android
         run: ./gradlew assembleRelease
 
+      - name: Sign APK (shared debug key, so it installs)
+        run: bash scripts/sign-apk.sh "$(ls apps/quasar/android/app/build/outputs/apk/release/*.apk | head -1)" signed/pulse-quasar.apk
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
           name: quasar-android
-          path: apps/quasar/android/app/build/outputs/apk/release/*.apk
+          path: signed/pulse-quasar.apk
           retention-days: 30
 
   windows:

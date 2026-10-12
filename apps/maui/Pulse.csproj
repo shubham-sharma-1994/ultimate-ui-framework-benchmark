@@ -13,10 +13,10 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 
 		<!-- Display name -->
-		<ApplicationTitle>Pulse</ApplicationTitle>
+		<ApplicationTitle>Pulse MAUI</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.pulse</ApplicationId>
+		<ApplicationId>dev.pulse.maui</ApplicationId>
 		<ApplicationIdGuid>243631a6-7376-42a3-aba5-a32c87152c44</ApplicationIdGuid>
 
 		<!-- Versions -->

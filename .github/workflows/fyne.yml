@@ -57,7 +57,7 @@ jobs:
       - name: Build Android
         run: |
           cd apps/fyne
-          fyne package -os android -appID com.example.pulsefyne
+          fyne package -os android -appID dev.pulse.fyne
           mv *.apk app-fyne.apk
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4

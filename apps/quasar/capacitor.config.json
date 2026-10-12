@@ -1,5 +1,5 @@
 {
-  "appId": "com.pulse.app",
+  "appId": "dev.pulse.quasar",
   "appName": "Pulse",
   "webDir": "dist"
 }

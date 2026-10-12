@@ -93,8 +93,10 @@ jobs:
       - name: Build Android
         working-directory: apps/tauri
         run: npm run tauri android build
+      - name: Sign APK (shared debug key, so it installs)
+        run: bash scripts/sign-apk.sh "$(ls apps/tauri/src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk | head -1)" signed/pulse-tauri.apk
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: tauri-android
-          path: apps/tauri/src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk
+          path: signed/pulse-tauri.apk
