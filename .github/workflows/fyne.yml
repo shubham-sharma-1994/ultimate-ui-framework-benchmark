@@ -21,8 +21,8 @@ jobs:
         with:
           go-version: '1.24.x'
           cache-dependency-path: 'apps/fyne/go.sum'
-      - name: Install fyne CLI
-        run: go install fyne.io/fyne/v2/cmd/fyne@latest
+      - name: Install fyne tools
+        run: go install fyne.io/tools/cmd/fyne@latest
       - name: Build Web (WASM)
         run: |
           cd apps/fyne
@@ -50,8 +50,8 @@ jobs:
         with:
           ndk-version: r26b
           add-to-path: true
-      - name: Install fyne CLI
-        run: go install fyne.io/fyne/v2/cmd/fyne@latest
+      - name: Install fyne tools
+        run: go install fyne.io/tools/cmd/fyne@latest
       - name: Setup dependencies
         run: sudo apt-get update && sudo apt-get install -y gcc libgl1-mesa-dev xorg-dev
       - name: Build Android
@@ -80,8 +80,8 @@ jobs:
         with:
           install: mingw-w64-x86_64-gcc
           path-type: inherit
-      - name: Install fyne CLI
-        run: go install fyne.io/fyne/v2/cmd/fyne@latest
+      - name: Install fyne tools
+        run: go install fyne.io/tools/cmd/fyne@latest
       - name: Build Windows
         run: |
           cd apps/fyne
