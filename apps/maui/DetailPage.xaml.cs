@@ -2,6 +2,24 @@ namespace Pulse;
 
 public partial class DetailPage : ContentPage
 {
+    private void OnPointerEntered(object sender, PointerEventArgs e)
+    {
+        if (sender is View view)
+        {
+            view.FadeTo(0.8, 150);
+            view.ScaleTo(1.02, 150);
+        }
+    }
+
+    private void OnPointerExited(object sender, PointerEventArgs e)
+    {
+        if (sender is View view)
+        {
+            view.FadeTo(1, 150);
+            view.ScaleTo(1, 150);
+        }
+    }
+
     private ProgressRingDrawable _ringDrawable;
     private IDispatcherTimer _ringTimer;
     private ItemData _item;
