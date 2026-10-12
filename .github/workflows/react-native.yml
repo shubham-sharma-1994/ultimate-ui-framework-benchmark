@@ -1,0 +1,78 @@
+name: React Native (Expo)
+
+on:
+  push:
+    paths:
+      - 'apps/react-native/**'
+      - '.github/workflows/react-native.yml'
+  pull_request:
+    paths:
+      - 'apps/react-native/**'
+      - '.github/workflows/react-native.yml'
+  workflow_dispatch:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: apps/react-native/package-lock.json
+
+      - name: Install dependencies
+        working-directory: apps/react-native
+        run: npm ci
+
+      - name: Build Web
+        working-directory: apps/react-native
+        run: npx expo export -p web
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-native-web
+          path: apps/react-native/dist
+          retention-days: 30
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: apps/react-native/package-lock.json
+
+      - name: Install dependencies
+        working-directory: apps/react-native
+        run: npm ci
+
+      - name: Build Android APK
+        working-directory: apps/react-native
+        # In a real CI for a benchmark, we'd use EAS (Expo Application Services) or gradlew directly for a bare build.
+        # For simplicity and given moderate effort rules without EAS accounts, we will do a local prep & gradle build.
+        run: |
+          npx expo prebuild --platform android --clean
+          cd android
+          ./gradlew assembleRelease
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: react-native-android
+          path: apps/react-native/android/app/build/outputs/apk/release/app-release.apk
+          retention-days: 30
