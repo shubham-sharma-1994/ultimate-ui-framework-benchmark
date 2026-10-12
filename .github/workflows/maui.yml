@@ -49,10 +49,10 @@ jobs:
         run: dotnet workload install maui
 
       - name: Build Windows
-        run: dotnet build apps/maui/Pulse.csproj -c Release -f net9.0-windows10.0.19041.0
+        run: dotnet publish apps/maui/Pulse.csproj -f net9.0-windows10.0.19041.0 -c Release -r win-x64 --self-contained -p:WindowsPackageType=None -p:WindowsAppSDKSelfContained=true -o publish/windows
 
       - name: Compress Windows Build
-        run: Compress-Archive -Path apps/maui/bin/Release/net9.0-windows10.0.19041.0/win10-x64/AppPackages/* -DestinationPath app-maui-windows.zip
+        run: Compress-Archive -Path publish/windows/* -DestinationPath app-maui-windows.zip
 
       - name: Upload Windows zip
         uses: actions/upload-artifact@v4
