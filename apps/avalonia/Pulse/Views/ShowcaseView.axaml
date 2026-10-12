@@ -1,0 +1,129 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Pulse.ViewModels"
+             xmlns:ctrl="using:Pulse.Controls"
+             xmlns:conv="using:Pulse.Converters"
+             mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="844"
+             x:Class="Pulse.Views.ShowcaseView"
+             x:DataType="vm:ShowcaseViewModel">
+
+    <UserControl.Resources>
+        <conv:HexToColorConverter x:Key="HexToColorConverter"/>
+        <conv:NotNullOrEmptyConverter x:Key="NotNullOrEmptyConverter"/>
+        <conv:EqualityConverter x:Key="EqualityConverter"/>
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- App Bar -->
+        <Border Grid.Row="0" Height="56" Background="{DynamicResource SurfaceBrush}" BoxShadow="{DynamicResource Elevation1}" ZIndex="10">
+            <Grid ColumnDefinitions="*,Auto" Margin="16,0">
+                <TextBlock Text="Pulse" FontSize="22" FontWeight="SemiBold" VerticalAlignment="Center" Foreground="{DynamicResource TextBrush}"/>
+                <Button Grid.Column="1" AutomationProperties.AutomationId="theme-toggle"
+                        Click="OnThemeToggleClicked" Background="Transparent" BorderThickness="0">
+                    <TextBlock Text="☀" FontSize="20" Foreground="{DynamicResource TextBrush}"/>
+                </Button>
+            </Grid>
+        </Border>
+
+        <!-- Scroll Content -->
+        <ScrollViewer Grid.Row="1" Padding="16" x:Name="MainScroll">
+            <StackPanel Spacing="16">
+
+                <!-- Hero Card -->
+                <Border Height="180" CornerRadius="20" AutomationProperties.AutomationId="hero-card">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                            <GradientStop Offset="0" Color="{DynamicResource PrimaryBrush}"/>
+                            <GradientStop Offset="1" Color="{DynamicResource AccentBrush}"/>
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Grid>
+                        <TextBlock Text="Same app. Every framework." FontSize="22" FontWeight="SemiBold"
+                                   Foreground="White" Margin="24" TextWrapping="Wrap"/>
+                        <ctrl:OrbitControl Width="100" Height="100" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="16" AutomationProperties.AutomationId="orbit"/>
+                    </Grid>
+                </Border>
+
+                <!-- Counter Row -->
+                <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+                    <TextBlock Grid.Column="0" Text="Taps" FontSize="13" FontWeight="Medium" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="{Binding TapsCount}" FontSize="32" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" Margin="16,0" VerticalAlignment="Center"/>
+                    <Button Grid.Column="2" Width="56" Height="56" CornerRadius="14" AutomationProperties.AutomationId="counter-inc"
+                            Command="{Binding IncrementTapsCommand}" Background="{DynamicResource PrimaryBrush}">
+                        <!-- Long press approximation -->
+                        <Button.Styles>
+                            <Style Selector="Button:pressed">
+                                <Setter Property="RenderTransform" Value="scale(0.96)" />
+                            </Style>
+                        </Button.Styles>
+                        <Button.Transitions>
+                            <Transitions>
+                                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" Easing="CubicEaseOut"/>
+                            </Transitions>
+                        </Button.Transitions>
+                        <TextBlock Text="+" FontSize="24" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Button>
+                </Grid>
+
+                <!-- Controls Card -->
+                <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="20" Padding="16" BoxShadow="{DynamicResource Elevation1}">
+                    <StackPanel Spacing="16">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Text="Notifications" VerticalAlignment="Center" FontSize="16" Foreground="{DynamicResource TextBrush}"/>
+                            <ToggleSwitch Grid.Column="1" AutomationProperties.AutomationId="switch" IsChecked="{Binding IsNotificationsEnabled}"/>
+                        </Grid>
+                        <StackPanel>
+                            <Grid ColumnDefinitions="Auto,*">
+                                <TextBlock Text="Intensity" FontSize="13" Foreground="{DynamicResource TextMutedBrush}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding IntensityValue, StringFormat=\{0:0\}}" HorizontalAlignment="Right" FontSize="13" Foreground="{DynamicResource TextBrush}"/>
+                            </Grid>
+                            <Slider Minimum="0" Maximum="100" Value="{Binding IntensityValue}" AutomationProperties.AutomationId="slider" Margin="0,8,0,0"/>
+                        </StackPanel>
+                        <!-- Chips Approximation -->
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <RadioButton Content="Low" GroupName="Chips" AutomationProperties.AutomationId="chip-low" IsChecked="{Binding SelectedChipIndex, Converter={StaticResource EqualityConverter}, ConverterParameter=0}"/>
+                            <RadioButton Content="Medium" GroupName="Chips" AutomationProperties.AutomationId="chip-medium" IsChecked="{Binding SelectedChipIndex, Converter={StaticResource EqualityConverter}, ConverterParameter=1}"/>
+                            <RadioButton Content="High" GroupName="Chips" AutomationProperties.AutomationId="chip-high" IsChecked="{Binding SelectedChipIndex, Converter={StaticResource EqualityConverter}, ConverterParameter=2}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- Text Field -->
+                <StackPanel Spacing="8">
+                    <TextBox AutomationProperties.AutomationId="name-input" Watermark="Your name" Text="{Binding NameInput}" CornerRadius="14" Height="56" VerticalContentAlignment="Center"/>
+                    <TextBlock Text="{Binding NameInput, StringFormat='Hello, \{0\}'}" FontSize="16" Foreground="{DynamicResource TextBrush}"
+                               IsVisible="{Binding NameInput, Converter={StaticResource NotNullOrEmptyConverter}}"/>
+                </StackPanel>
+
+                <!-- List of Items -->
+                <ItemsControl ItemsSource="{Binding Items}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding $parent[UserControl].((vm:ShowcaseViewModel)DataContext).GoToDetailCommand}" CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" Padding="0" Margin="0,0,0,16" HorizontalAlignment="Stretch">
+                                <Grid ColumnDefinitions="56, *, Auto" Background="Transparent" AutomationProperties.AutomationId="{Binding Id, StringFormat='item-\{0\}'}">
+                                    <Border Grid.Column="0" Width="56" Height="56" CornerRadius="16">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                                                <GradientStop Offset="0" Color="{Binding Colors[0], Converter={StaticResource HexToColorConverter}}"/>
+                                                <GradientStop Offset="1" Color="{Binding Colors[1], Converter={StaticResource HexToColorConverter}}"/>
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="16,0">
+                                        <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                                        <TextBlock Text="{Binding Subtitle}" FontSize="13" Foreground="{DynamicResource TextMutedBrush}"/>
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="2" Text="&gt;" FontSize="20" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Panel Height="32"/>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
