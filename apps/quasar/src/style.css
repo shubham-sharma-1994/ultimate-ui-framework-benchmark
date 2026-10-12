@@ -1,0 +1,57 @@
+/* Global tokens */
+:root {
+  --background: #F6F4FB;
+  --surface: #FFFFFF;
+  --surface-alt: #EEEAF7;
+  --primary: #6750A4;
+  --on-primary: #FFFFFF;
+  --accent: #FF7A59;
+  --text: #1D1B20;
+  --text-muted: #6B6674;
+  --outline: #D9D3E6;
+  --success: #2E9E6B;
+}
+
+body.body--dark {
+  --background: #121016;
+  --surface: #1C1A22;
+  --surface-alt: #26232E;
+  --primary: #CFBCFF;
+  --on-primary: #381E72;
+  --accent: #FF9E85;
+  --text: #E6E0E9;
+  --text-muted: #A9A3B3;
+  --outline: #3A3644;
+  --success: #5FD39B;
+}
+
+/* Base styles */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.5s cubic-bezier(0.05, 0.7, 0.1, 1),
+              color 0.5s cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.text-display { font-size: 32px; line-height: 40px; font-weight: 700; }
+.text-title { font-size: 22px; line-height: 28px; font-weight: 600; }
+.text-body { font-size: 16px; line-height: 24px; font-weight: 400; }
+.text-label { font-size: 13px; line-height: 16px; font-weight: 500; }
+.text-caption { font-size: 12px; line-height: 16px; font-weight: 400; }
+
+#app {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: var(--background);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Utility classes mapped to tokens */
+.bg-surface { background-color: var(--surface) !important; }
+.text-primary-token { color: var(--primary) !important; }
+.text-muted { color: var(--text-muted) !important; }
