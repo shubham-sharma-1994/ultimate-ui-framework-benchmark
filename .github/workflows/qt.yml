@@ -38,7 +38,7 @@ jobs:
           host: 'linux'
           target: 'desktop'
           arch: 'wasm_singlethread'
-          cache: true
+          cache: false
           install-deps: 'false'
           dir: '${{ github.workspace }}/Qt'
       - name: Install Ninja & Sys Deps

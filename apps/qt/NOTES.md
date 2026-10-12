@@ -14,7 +14,7 @@ Version used: 6.4/6.5 · Language: QML/C++ · Rendering model: own canvas (Qt Sc
 | C01 | ✅ | Done using Canvas and native gradient |
 | C02 | ✅ | Implicit animations handled well via QML Behaviors |
 | C03 | ⚠️ | Approximated via JS timers triggering translation logic per item index |
-| C04 | ⏭️ | Skipped; Hero/shared elements across StackView routes is non-trivial in QML |
+| C04 | ⚠️ | Approximated using a global animated overlay clone between routes |
 | C05 | ✅ | Done via StackView push/pop transition animations |
 | C06 | ✅ | Handled via SequentialAnimation inside Behavior |
 | C07 | ✅ | Native SpringAnimation bound to Drag events |
@@ -26,7 +26,7 @@ Version used: 6.4/6.5 · Language: QML/C++ · Rendering model: own canvas (Qt Sc
 | C13 | ⚠️ | Simplified shimmer skeleton using infinite animated rectangle translation |
 | C14 | ✅ | Theme property bindings smoothly animated via Behaviors |
 | C15 | ⚠️ | Skipped floating label due to complex overrides required for default TextField |
-| C16 | ⏭️ | WebAssembly doesn't map route back-history directly out of the box in basic setups |
+| C16 | ✅ | WebAssembly history managed via custom C++ HistoryManager and Emscripten HTML5 JS calls |
 | C17 | ✅ | Handled nicely out of the box |
 | C18 | ⚠️ | Automation ID provided via `objectName` property |
 

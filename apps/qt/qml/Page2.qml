@@ -36,6 +36,16 @@ Page {
                     height: 240
                     y: scrollView.contentY > 0 ? scrollView.contentY * 0.5 : 0
 
+                    opacity: 0
+                    Component.onCompleted: {
+                        headerTimer.start()
+                    }
+                    Timer {
+                        id: headerTimer
+                        interval: Theme.baseDuration
+                        onTriggered: parent.opacity = 1
+                    }
+
                     gradient: Gradient {
                         GradientStop { position: 0.0; color: itemData ? itemData.colors[0] : Theme.primary }
                         GradientStop { position: 1.0; color: itemData ? itemData.colors[1] : Theme.accent }
