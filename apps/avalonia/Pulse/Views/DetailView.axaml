@@ -1,0 +1,133 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Pulse.ViewModels"
+             xmlns:ctrl="using:Pulse.Controls"
+             xmlns:conv="using:Pulse.Converters"
+             mc:Ignorable="d" d:DesignWidth="480" d:DesignHeight="844"
+             x:Class="Pulse.Views.DetailView"
+             x:DataType="vm:DetailViewModel"
+             Loaded="OnLoaded">
+
+    <UserControl.Resources>
+        <conv:HexToColorConverter x:Key="HexToColorConverter"/>
+    </UserControl.Resources>
+
+    <!-- Overlay container for Toast/Dialog/Sheet approximations -->
+    <Grid>
+        <Grid RowDefinitions="Auto,*">
+            <!-- Header (parallax approximation could be done by binding translation to scroll offset, skipping for simplicity and doing fixed header here) -->
+            <Border Grid.Row="0" Height="240" AutomationProperties.AutomationId="detail-header">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                        <GradientStop Offset="0" Color="{Binding Item.Colors[0], Converter={StaticResource HexToColorConverter}}"/>
+                        <GradientStop Offset="1" Color="{Binding Item.Colors[1], Converter={StaticResource HexToColorConverter}}"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <Button AutomationProperties.AutomationId="back" Command="{Binding GoBackCommand}"
+                            HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16"
+                            Background="Transparent" BorderThickness="0">
+                        <TextBlock Text="&lt; Back" Foreground="White" FontSize="16"/>
+                    </Button>
+                    <TextBlock Text="{Binding Item.Title}" FontSize="32" FontWeight="Bold" Foreground="White"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <!-- Scrollable Content -->
+            <ScrollViewer Grid.Row="1" Padding="16">
+                <StackPanel Spacing="16">
+
+                    <!-- Progress Ring -->
+                    <Grid Width="120" Height="120" HorizontalAlignment="Center" PointerPressed="OnRingTapped" AutomationProperties.AutomationId="ring">
+                        <ctrl:ProgressRingControl Value="{Binding AnimatedScore}">
+                            <ctrl:ProgressRingControl.RingBrush>
+                                <SolidColorBrush Color="{Binding Item.Colors[0], Converter={StaticResource HexToColorConverter}}"/>
+                            </ctrl:ProgressRingControl.RingBrush>
+                        </ctrl:ProgressRingControl>
+                        <TextBlock Text="{Binding AnimatedScore, StringFormat=\{0:0\}%}" FontSize="22" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+
+                    <!-- Accordion (Expander) -->
+                    <Expander Header="Details" AutomationProperties.AutomationId="accordion" Background="{DynamicResource SurfaceBrush}" BorderThickness="0" CornerRadius="14">
+                        <!-- Shimmer skeleton -->
+                        <Panel>
+                            <StackPanel Spacing="8" IsVisible="{Binding IsShimmerVisible}" AutomationProperties.AutomationId="shimmer" Opacity="0.5">
+                                <Border Height="16" Background="{DynamicResource OutlineBrush}" CornerRadius="8"/>
+                                <Border Height="16" Background="{DynamicResource OutlineBrush}" CornerRadius="8" Width="200" HorizontalAlignment="Left"/>
+                                <Border Height="16" Background="{DynamicResource OutlineBrush}" CornerRadius="8" Width="150" HorizontalAlignment="Left"/>
+                            </StackPanel>
+
+                            <TextBlock Text="{Binding Item.Body}" Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"
+                                       IsVisible="{Binding IsContentVisible}"/>
+                        </Panel>
+                    </Expander>
+
+                    <!-- Draggable Card (approximated with simple static card due to complexity of pointer capture + spring physics) -->
+                    <Border Background="{DynamicResource SurfaceAltBrush}" CornerRadius="20" Height="96" AutomationProperties.AutomationId="drag-card">
+                        <TextBlock Text="Draggable (Approximated)" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource TextBrush}"/>
+                    </Border>
+
+                    <!-- Swipe to dismiss (approximated with normal items + delete button) -->
+                    <Border Background="{DynamicResource SurfaceBrush}" CornerRadius="14" Padding="16">
+                        <StackPanel Spacing="8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock Text="Swipe List" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                                <Button Content="Reset" Command="{Binding ResetSwipeCommand}" AutomationProperties.AutomationId="swipe-reset" Grid.Column="1" Background="Transparent" Foreground="{DynamicResource PrimaryBrush}"/>
+                            </Grid>
+                            <ItemsControl ItemsSource="{Binding SwipeItems}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto" Margin="0,4" AutomationProperties.AutomationId="swipe-item">
+                                            <TextBlock Text="{Binding}" Foreground="{DynamicResource TextBrush}" VerticalAlignment="Center"/>
+                                            <Button Content="Dismiss" Grid.Column="1" Click="OnDismissClicked" Background="{DynamicResource AccentBrush}" Foreground="White" CornerRadius="8"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Buttons Row -->
+                    <Grid ColumnDefinitions="*,*,*" Margin="0,16,0,0">
+                        <Button Grid.Column="0" Content="Dialog" AutomationProperties.AutomationId="btn-dialog" Click="OnShowDialog" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="{DynamicResource SurfaceBrush}" Foreground="{DynamicResource TextBrush}"/>
+                        <Button Grid.Column="1" Content="Sheet" AutomationProperties.AutomationId="btn-sheet" Click="OnShowSheet" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="8,0" Background="{DynamicResource SurfaceBrush}" Foreground="{DynamicResource TextBrush}"/>
+                        <Button Grid.Column="2" Content="Toast" AutomationProperties.AutomationId="btn-toast" Click="OnShowToast" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="{DynamicResource SurfaceBrush}" Foreground="{DynamicResource TextBrush}"/>
+                    </Grid>
+
+                    <Panel Height="32"/>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <!-- Overlays -->
+        <Border x:Name="OverlayScrim" Background="#66000000" IsVisible="False" PointerPressed="OnScrimTapped"/>
+
+        <Border x:Name="DialogOverlay" Background="{DynamicResource SurfaceBrush}" CornerRadius="20" Padding="24"
+                HorizontalAlignment="Center" VerticalAlignment="Center" IsVisible="False" BoxShadow="{DynamicResource Elevation2}">
+            <StackPanel Spacing="16">
+                <TextBlock Text="Dialog Title" FontSize="22" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                <TextBlock Text="This is a modal dialog." Foreground="{DynamicResource TextBrush}"/>
+                <Button Content="Close" Click="OnCloseOverlays" HorizontalAlignment="Right" Background="Transparent" Foreground="{DynamicResource PrimaryBrush}"/>
+            </StackPanel>
+        </Border>
+
+        <Border x:Name="SheetOverlay" Background="{DynamicResource SurfaceBrush}" CornerRadius="28,28,0,0" Padding="24"
+                HorizontalAlignment="Stretch" VerticalAlignment="Bottom" IsVisible="False" BoxShadow="{DynamicResource Elevation2}" Height="300">
+            <StackPanel Spacing="16">
+                <Border Width="40" Height="4" CornerRadius="2" Background="{DynamicResource OutlineBrush}" HorizontalAlignment="Center"/>
+                <TextBlock Text="Bottom Sheet" FontSize="22" FontWeight="SemiBold" Foreground="{DynamicResource TextBrush}"/>
+                <TextBlock Text="Swipe down or tap outside to dismiss." Foreground="{DynamicResource TextBrush}"/>
+            </StackPanel>
+        </Border>
+
+        <Border x:Name="ToastOverlay" Background="{DynamicResource SurfaceAltBrush}" CornerRadius="8" Padding="16,12"
+                HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,32" IsVisible="False" BoxShadow="{DynamicResource Elevation1}">
+            <TextBlock Text="This is a toast message." Foreground="{DynamicResource TextBrush}"/>
+        </Border>
+
+    </Grid>
+</UserControl>

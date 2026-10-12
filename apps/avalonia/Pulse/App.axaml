@@ -1,0 +1,54 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="using:Pulse"
+             x:Class="Pulse.App"
+             RequestedThemeVariant="Light">
+
+    <Application.DataTemplates>
+        <local:ViewLocator />
+    </Application.DataTemplates>
+
+    <Application.Styles>
+        <FluentTheme />
+        <Style Selector="TextBlock, TextBox, Button, ToggleSwitch, Slider, RadioButton">
+            <Setter Property="TextElement.FontFamily" Value="{StaticResource InterFont}" />
+        </Style>
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="BackgroundBrush" Color="#F6F4FB"/>
+                    <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
+                    <SolidColorBrush x:Key="SurfaceAltBrush" Color="#EEEAF7"/>
+                    <SolidColorBrush x:Key="PrimaryBrush" Color="#6750A4"/>
+                    <SolidColorBrush x:Key="OnPrimaryBrush" Color="#FFFFFF"/>
+                    <SolidColorBrush x:Key="AccentBrush" Color="#FF7A59"/>
+                    <SolidColorBrush x:Key="TextBrush" Color="#1D1B20"/>
+                    <SolidColorBrush x:Key="TextMutedBrush" Color="#6B6674"/>
+                    <SolidColorBrush x:Key="OutlineBrush" Color="#D9D3E6"/>
+                    <SolidColorBrush x:Key="SuccessBrush" Color="#2E9E6B"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="BackgroundBrush" Color="#121016"/>
+                    <SolidColorBrush x:Key="SurfaceBrush" Color="#1C1A22"/>
+                    <SolidColorBrush x:Key="SurfaceAltBrush" Color="#26232E"/>
+                    <SolidColorBrush x:Key="PrimaryBrush" Color="#CFBCFF"/>
+                    <SolidColorBrush x:Key="OnPrimaryBrush" Color="#381E72"/>
+                    <SolidColorBrush x:Key="AccentBrush" Color="#FF9E85"/>
+                    <SolidColorBrush x:Key="TextBrush" Color="#E6E0E9"/>
+                    <SolidColorBrush x:Key="TextMutedBrush" Color="#A9A3B3"/>
+                    <SolidColorBrush x:Key="OutlineBrush" Color="#3A3644"/>
+                    <SolidColorBrush x:Key="SuccessBrush" Color="#5FD39B"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
+            <FontFamily x:Key="InterFont">avares://Pulse/Assets/Fonts/Inter.ttf#Inter</FontFamily>
+
+            <BoxShadows x:Key="Elevation1">0 2 8 0 #14000000</BoxShadows>
+            <BoxShadows x:Key="Elevation2">0 8 24 0 #29000000</BoxShadows>
+        </ResourceDictionary>
+    </Application.Resources>
+
+</Application>
