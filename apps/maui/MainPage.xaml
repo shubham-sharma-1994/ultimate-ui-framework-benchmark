@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Pulse"
+             x:Class="Pulse.MainPage"
+             BackgroundColor="{DynamicResource BackgroundColor}">
+
+    <ContentPage.Resources>
+        <local:OrbitDrawable x:Key="OrbitDrawable" />
+        <LinearGradientBrush x:Key="HeroGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="{DynamicResource PrimaryColor}" Offset="0.0" />
+            <GradientStop Color="{DynamicResource AccentColor}" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="56, *">
+        <!-- App bar -->
+        <Grid x:Name="AppBar" Grid.Row="0" BackgroundColor="{DynamicResource SurfaceColor}" Padding="16,0" ZIndex="10">
+            <Grid.Shadow>
+                <Shadow x:Name="AppBarShadow" Brush="Black" Opacity="0" Offset="0,2" Radius="8" />
+            </Grid.Shadow>
+            <Label Text="Pulse" Style="{DynamicResource Title}" TextColor="{DynamicResource TextColor}" VerticalOptions="Center" />
+            <ImageButton x:Name="ThemeToggle" AutomationId="theme-toggle" Source="moon.svg" HorizontalOptions="End" VerticalOptions="Center" WidthRequest="44" HeightRequest="44" Clicked="OnThemeToggleClicked" />
+        </Grid>
+
+        <ScrollView Grid.Row="1" x:Name="MainScroll" Scrolled="OnMainScroll">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <!-- Hero card -->
+                <Border StrokeShape="RoundRectangle 20" Background="{StaticResource HeroGradient}" HeightRequest="180" StrokeThickness="0">
+                    <Grid>
+                        <GraphicsView x:Name="OrbitView" AutomationId="orbit" Drawable="{StaticResource OrbitDrawable}" HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="100" HeightRequest="100" />
+                        <Label Text="Same app. Every framework." Style="{DynamicResource Title}" TextColor="White" HorizontalOptions="Center" VerticalOptions="End" Margin="0,0,0,24" />
+                    </Grid>
+                </Border>
+
+                <!-- Counter row -->
+                <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                        <Label Text="Taps" Style="{DynamicResource LabelStyle}" TextColor="{DynamicResource TextMutedColor}" VerticalOptions="Center" />
+                        <Grid>
+                            <Label x:Name="TapsLabelOld" Text="0" Style="{DynamicResource Display}" TextColor="{DynamicResource TextColor}" Opacity="0" />
+                            <Label x:Name="TapsLabel" Text="0" Style="{DynamicResource Display}" TextColor="{DynamicResource TextColor}" />
+                        </Grid>
+                    </HorizontalStackLayout>
+                    <Button Grid.Column="1" x:Name="CounterInc" AutomationId="counter-inc" Text="+" WidthRequest="56" HeightRequest="56" CornerRadius="16" Clicked="OnCounterIncClicked">
+                        <Button.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnCounterIncClicked" />
+                            <!-- Simulate long press through platform specific or simple click holding -->
+                            <!-- Note: Natively MAUI doesnt have a LongPress on Button without custom renderers or behaviors. -->
+                        </Button.GestureRecognizers>
+                    </Button>
+                </Grid>
+
+                <!-- Controls card -->
+                <Border StrokeShape="RoundRectangle 20" BackgroundColor="{DynamicResource SurfaceColor}" StrokeThickness="0">
+                    <Border.Shadow>
+                        <Shadow Brush="Black" Opacity="0.08" Offset="0,2" Radius="8" />
+                    </Border.Shadow>
+                    <VerticalStackLayout Padding="16" Spacing="16">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <Label Text="Notifications" Style="{DynamicResource Body}" TextColor="{DynamicResource TextColor}" VerticalOptions="Center" />
+                            <Switch Grid.Column="1" x:Name="SwitchNotifications" AutomationId="switch" />
+                        </Grid>
+
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="SliderLabel" Text="Intensity: 0" Style="{DynamicResource Body}" TextColor="{DynamicResource TextColor}" />
+                            <Slider x:Name="SliderIntensity" AutomationId="slider" Minimum="0" Maximum="100" Value="0" ValueChanged="OnSliderValueChanged" />
+                        </VerticalStackLayout>
+
+                        <HorizontalStackLayout Spacing="8">
+                            <Border x:Name="ChipLow" AutomationId="chip-low" StrokeShape="RoundRectangle 999" BackgroundColor="{DynamicResource PrimaryColor}" StrokeThickness="0" Padding="12,6">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnChipClicked" CommandParameter="Low"/>
+                                </Border.GestureRecognizers>
+                                <Label Text="Low" Style="{DynamicResource LabelStyle}" TextColor="{DynamicResource OnPrimaryColor}" />
+                            </Border>
+                            <Border x:Name="ChipMedium" AutomationId="chip-medium" StrokeShape="RoundRectangle 999" BackgroundColor="{DynamicResource SurfaceAltColor}" StrokeThickness="0" Padding="12,6">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnChipClicked" CommandParameter="Medium"/>
+                                </Border.GestureRecognizers>
+                                <Label Text="Medium" Style="{DynamicResource LabelStyle}" TextColor="{DynamicResource TextColor}" />
+                            </Border>
+                            <Border x:Name="ChipHigh" AutomationId="chip-high" StrokeShape="RoundRectangle 999" BackgroundColor="{DynamicResource SurfaceAltColor}" StrokeThickness="0" Padding="12,6">
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnChipClicked" CommandParameter="High"/>
+                                </Border.GestureRecognizers>
+                                <Label Text="High" Style="{DynamicResource LabelStyle}" TextColor="{DynamicResource TextColor}" />
+                            </Border>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Text field -->
+                <VerticalStackLayout Spacing="8">
+                    <!-- Fake floating label text field for MAUI -->
+                    <Border x:Name="NameInputBorder" StrokeShape="RoundRectangle 14" Stroke="{DynamicResource OutlineColor}" StrokeThickness="1" BackgroundColor="{DynamicResource SurfaceColor}" Padding="12,12">
+                        <Grid>
+                            <Label x:Name="NameInputLabel" Text="Your name" Style="{DynamicResource Body}" TextColor="{DynamicResource TextMutedColor}" VerticalOptions="Center" />
+                            <Entry x:Name="NameInput" AutomationId="name-input" TextColor="{DynamicResource TextColor}" BackgroundColor="Transparent" Focused="OnNameInputFocused" Unfocused="OnNameInputUnfocused" TextChanged="OnNameInputTextChanged" />
+                        </Grid>
+                    </Border>
+                    <Label x:Name="GreetingLabel" Text="" Style="{DynamicResource Body}" TextColor="{DynamicResource TextColor}" Opacity="0" />
+                </VerticalStackLayout>
+
+                <!-- List of items -->
+                <VerticalStackLayout x:Name="ItemsList" Spacing="16" />
+
+                <!-- Bottom spacing -->
+                <BoxView HeightRequest="32" Color="Transparent" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

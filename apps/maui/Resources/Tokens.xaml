@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Grid / Spacing -->
+    <Thickness x:Key="Spacing4">4</Thickness>
+    <Thickness x:Key="Spacing8">8</Thickness>
+    <Thickness x:Key="Spacing12">12</Thickness>
+    <Thickness x:Key="Spacing16">16</Thickness>
+    <Thickness x:Key="Spacing24">24</Thickness>
+    <Thickness x:Key="Spacing32">32</Thickness>
+
+    <!-- Radii -->
+    <CornerRadius x:Key="CardRadius">20</CornerRadius>
+    <CornerRadius x:Key="ButtonRadius">14</CornerRadius>
+    <CornerRadius x:Key="ChipRadius">999</CornerRadius>
+    <CornerRadius x:Key="InputRadius">14</CornerRadius>
+    <CornerRadius x:Key="SheetTopRadius">28,28,0,0</CornerRadius>
+
+    <!-- Elevations (approximated for MAUI with Shadows) -->
+    <Shadow x:Key="Elevation1" Brush="Black" Opacity="0.08" Offset="0,2" Radius="8" />
+    <Shadow x:Key="Elevation2" Brush="Black" Opacity="0.16" Offset="0,8" Radius="24" />
+
+    <!-- Motion -->
+    <x:UInt32 x:Key="DurationFast">150</x:UInt32>
+    <x:UInt32 x:Key="DurationBase">300</x:UInt32>
+    <x:UInt32 x:Key="DurationSlow">500</x:UInt32>
+
+</ResourceDictionary>
