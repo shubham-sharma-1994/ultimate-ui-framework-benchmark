@@ -1,0 +1,34 @@
+import { Tokens } from "../tokens.slint";
+import { Orbit } from "orbit.slint";
+
+export component HeroCard {
+    width: 100%;
+    height: 180px;
+
+    Rectangle {
+        width: 100%;
+        height: 100%;
+        border-radius: 20px;
+        // Slint linear gradient doesn't support an angle directly in the same way, but supports to/from directions
+        // We approximate 135deg with to bottom right.
+        background: @linear-gradient(135deg, Tokens.active-primary 0%, Tokens.active-accent 100%);
+
+        HorizontalLayout {
+            padding: 16px;
+            alignment: space-between;
+
+            Text {
+                text: "Same app.\nEvery framework.";
+                color: Tokens.active-onPrimary;
+                font-size: Tokens.font-title;
+                font-weight: Tokens.weight-title;
+                vertical-alignment: center;
+            }
+
+            VerticalLayout {
+                alignment: center;
+                Orbit {}
+            }
+        }
+    }
+}

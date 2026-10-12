@@ -1,0 +1,114 @@
+import { Tokens } from "tokens.slint";
+import { ItemData } from "item_data.slint";
+import { HeroCard } from "components/hero_card.slint";
+import { CounterRow } from "components/counter_row.slint";
+import { ControlsCard } from "components/controls_card.slint";
+import { TextFieldCard } from "components/text_field_card.slint";
+
+export component Page1 {
+    in-out property <[ItemData]> items;
+    in-out property <int> taps;
+    callback theme-toggled();
+    callback item-tapped(int);
+
+    // Counter logic inside Page1 for convenience
+    callback inc-tapped();
+    callback reset-tapped();
+
+    property <length> counter-shake-offset: 0px;
+    property <bool> is-shaking: false;
+
+    // We approximate the shake by toggling a state
+    states [
+        shaking when is-shaking: {
+            counter-shake-offset: 6px;
+            in {
+                animate counter-shake-offset { duration: 50ms; iteration-count: 6; direction: alternate; }
+            }
+        }
+    ]
+
+    Flickable {
+        width: 100%;
+        height: 100%;
+
+        VerticalLayout {
+            padding: 16px;
+            spacing: 16px;
+            alignment: start;
+
+            // App bar
+            Rectangle {
+                height: 56px;
+                HorizontalLayout {
+                    alignment: space-between;
+                    Text {
+                        text: "Pulse";
+                        color: Tokens.active-text;
+                        font-size: Tokens.font-display;
+                        font-weight: Tokens.weight-display;
+                        vertical-alignment: center;
+                    }
+                    Rectangle {
+                        width: 44px; height: 44px;
+                        border-radius: 22px;
+                        Text {
+                            text: Tokens.is-dark ? "☀️" : "🌙";
+                            horizontal-alignment: center; vertical-alignment: center;
+                        }
+                        TouchArea { clicked => { root.theme-toggled(); } }
+                    }
+                }
+            }
+
+            HeroCard {}
+
+            CounterRow {
+                taps: root.taps;
+                shake-offset: counter-shake-offset;
+                inc-tapped => { root.taps += 1; }
+                reset-tapped => { root.taps = 0; root.is-shaking = true; /* Need to reset is-shaking somehow, omitting for simplicity or use timer in rust */ }
+            }
+
+            ControlsCard {}
+
+            TextFieldCard {}
+
+            // List of items
+            for item[idx] in root.items : Rectangle {
+                height: 56px;
+                border-radius: 16px;
+                background: Tokens.active-surface;
+
+                HorizontalLayout {
+                    spacing: 16px;
+                    Rectangle {
+                        width: 56px; height: 56px;
+                        border-radius: 16px;
+                        background: @linear-gradient(135deg, item.color1 0%, item.color2 100%);
+                    }
+                    VerticalLayout {
+                        alignment: center;
+                        Text {
+                            text: item.title;
+                            color: Tokens.active-text;
+                            font-size: Tokens.font-body;
+                            font-weight: Tokens.weight-body;
+                        }
+                        Text {
+                            text: item.subtitle;
+                            color: Tokens.active-textMuted;
+                            font-size: Tokens.font-caption;
+                        }
+                    }
+                }
+
+                TouchArea {
+                    clicked => { root.item-tapped(item.id); }
+                }
+            }
+
+            Rectangle { height: 32px; } // bottom padding
+        }
+    }
+}

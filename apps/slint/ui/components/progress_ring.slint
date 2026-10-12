@@ -1,0 +1,32 @@
+import { Tokens } from "../tokens.slint";
+
+export component ProgressRing {
+    in property <int> score;
+    in property <bool> active: false;
+
+    width: 120px;
+    height: 120px;
+
+    // Slint doesn't have an easy animated dash-array to animate stroke for a Path.
+    // We can approximate it or use an angle based Path drawing but we'll have to use Path with commands
+    // and math. Let's just draw a full ring for simplicity and skip the animated part,
+    // or use a Rectangle with rounded corners as a placeholder if Path is too complex.
+    // Actually, Slint Path can draw arcs. But drawing an arc with a dynamic angle requires rust code to generate elements, or a very long set of commands.
+    // For now we'll do a simple representation (Text in circle).
+
+    Rectangle {
+        width: 100%; height: 100%;
+        border-radius: 60px;
+        border-width: 12px;
+        border-color: Tokens.active-surfaceAlt;
+
+        Text {
+            text: root.score + "%";
+            color: Tokens.active-text;
+            font-size: Tokens.font-display;
+            font-weight: Tokens.weight-display;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+    }
+}

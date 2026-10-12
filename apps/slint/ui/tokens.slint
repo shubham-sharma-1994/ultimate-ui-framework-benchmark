@@ -1,0 +1,62 @@
+export global Tokens {
+    // Colors Light
+    out property <color> background: #F6F4FB;
+    out property <color> surface: #FFFFFF;
+    out property <color> surfaceAlt: #EEEAF7;
+    out property <color> primary: #6750A4;
+    out property <color> onPrimary: #FFFFFF;
+    out property <color> accent: #FF7A59;
+    out property <color> text: #1D1B20;
+    out property <color> textMuted: #6B6674;
+    out property <color> outline: #D9D3E6;
+    out property <color> success: #2E9E6B;
+
+    // Colors Dark
+    out property <color> dark-background: #121016;
+    out property <color> dark-surface: #1C1A22;
+    out property <color> dark-surfaceAlt: #26232E;
+    out property <color> dark-primary: #CFBCFF;
+    out property <color> dark-onPrimary: #381E72;
+    out property <color> dark-accent: #FF9E85;
+    out property <color> dark-text: #E6E0E9;
+    out property <color> dark-textMuted: #A9A3B3;
+    out property <color> dark-outline: #3A3644;
+    out property <color> dark-success: #5FD39B;
+
+    // Theme state
+    in-out property <bool> is-dark: false;
+
+    // Active colors computed
+    out property <color> active-background: is-dark ? dark-background : background;
+    out property <color> active-surface: is-dark ? dark-surface : surface;
+    out property <color> active-surfaceAlt: is-dark ? dark-surfaceAlt : surfaceAlt;
+    out property <color> active-primary: is-dark ? dark-primary : primary;
+    out property <color> active-onPrimary: is-dark ? dark-onPrimary : onPrimary;
+    out property <color> active-accent: is-dark ? dark-accent : accent;
+    out property <color> active-text: is-dark ? dark-text : text;
+    out property <color> active-textMuted: is-dark ? dark-textMuted : textMuted;
+    out property <color> active-outline: is-dark ? dark-outline : outline;
+    out property <color> active-success: is-dark ? dark-success : success;
+
+    // Type Scale Sizes
+    out property <length> font-display: 32px;
+    out property <length> font-title: 22px;
+    out property <length> font-body: 16px;
+    out property <length> font-label: 13px;
+    out property <length> font-caption: 12px;
+
+    // Type Scale Weights
+    out property <int> weight-display: 700;
+    out property <int> weight-title: 600;
+    out property <int> weight-body: 400;
+    out property <int> weight-label: 500;
+    out property <int> weight-caption: 400;
+
+    // Durations
+    out property <duration> fast: 150ms;
+    out property <duration> base: 300ms;
+    out property <duration> slow: 500ms;
+
+    // Layout
+    out property <length> max-width: 480px;
+}

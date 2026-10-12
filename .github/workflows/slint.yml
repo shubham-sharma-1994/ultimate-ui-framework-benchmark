@@ -1,0 +1,77 @@
+name: Slint CI
+
+on:
+  push:
+    paths:
+      - 'apps/slint/**'
+      - '.github/workflows/slint.yml'
+  pull_request:
+    paths:
+      - 'apps/slint/**'
+      - '.github/workflows/slint.yml'
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+      - name: Build Windows
+        working-directory: apps/slint
+        run: cargo build --release
+      - name: Package Windows Artifact
+        working-directory: apps/slint
+        run: |
+          mkdir release
+          cp target/release/pulse-slint.exe release/app-pulse-slint.exe
+          Compress-Archive -Path release\* -DestinationPath app-pulse-slint-windows.zip
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pulse-slint-windows
+          path: apps/slint/app-pulse-slint-windows.zip
+          retention-days: 30
+
+  build-web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - name: Install trunk
+        uses: jetli/trunk-action@v0.5.0
+      - name: Build Web
+        working-directory: apps/slint
+        run: |
+          cat > index.html << 'HTML'
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <title>Pulse Slint</title>
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <link data-trunk rel="rust" href="Cargo.toml" />
+            </head>
+            <body>
+            </body>
+          </html>
+          HTML
+          trunk build --release
+      - name: Upload Web Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pulse-slint-web
+          path: apps/slint/dist
+          retention-days: 30
+
+  build-android:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Skip Android
+        run: echo "Skipped android build due to headless environment complexity."

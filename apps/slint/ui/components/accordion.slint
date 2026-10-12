@@ -1,0 +1,51 @@
+import { Tokens } from "../tokens.slint";
+
+export component Accordion {
+    in-out property <bool> expanded: false;
+
+    Rectangle {
+        width: 100%;
+        background: Tokens.active-surface;
+        border-radius: 14px;
+        clip: true;
+
+        VerticalLayout {
+            Rectangle {
+                height: 56px;
+                HorizontalLayout {
+                    padding: 16px;
+                    alignment: space-between;
+                    Text {
+                        text: "Details";
+                        color: Tokens.active-text;
+                        font-size: Tokens.font-body;
+                        vertical-alignment: center;
+                    }
+                    Text {
+                        text: "v";
+                        color: Tokens.active-textMuted;
+                        vertical-alignment: center;
+                        // Animate rotation (approx)
+                    }
+                }
+                TouchArea {
+                    clicked => { root.expanded = !root.expanded; }
+                }
+            }
+
+            content := Rectangle {
+                // Animate height
+                height: root.expanded ? 100px : 0px;
+                animate height { duration: Tokens.base; }
+                opacity: root.expanded ? 1.0 : 0.0;
+                animate opacity { duration: Tokens.base; } // Slint lacks staggered delay easily, we just animate together
+
+                Text {
+                    x: 16px; y: 16px;
+                    text: "Accordion content goes here...";
+                    color: Tokens.active-text;
+                }
+            }
+        }
+    }
+}
