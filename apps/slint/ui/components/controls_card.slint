@@ -1,0 +1,87 @@
+import { Tokens } from "../tokens.slint";
+import { Switch, Slider } from "std-widgets.slint";
+
+export component ControlsCard {
+    in-out property <bool> notifications-enabled: false;
+    in-out property <float> intensity: 0;
+    in-out property <int> selected-chip: 0; // 0=Low, 1=Medium, 2=High
+
+    Rectangle {
+        width: 100%;
+        background: Tokens.active-surface;
+        border-radius: 20px;
+        // e1 shadow: 0 2 8 rgba(0,0,0,.08)
+        drop-shadow-color: Tokens.is-dark ? #00000040 : #00000014;
+        drop-shadow-blur: 8px;
+        drop-shadow-offset-y: 2px;
+
+        VerticalLayout {
+            padding: 16px;
+            spacing: 16px;
+
+            HorizontalLayout {
+                alignment: space-between;
+                Text {
+                    text: "Notifications";
+                    color: Tokens.active-text;
+                    font-size: Tokens.font-body;
+                    font-weight: Tokens.weight-body;
+                    vertical-alignment: center;
+                }
+                Switch {
+                    checked <=> root.notifications-enabled;
+                }
+            }
+
+            VerticalLayout {
+                spacing: 8px;
+                HorizontalLayout {
+                    alignment: space-between;
+                    Text {
+                        text: "Intensity";
+                        color: Tokens.active-text;
+                        font-size: Tokens.font-body;
+                    }
+                    Text {
+                        text: Math.round(root.intensity);
+                        color: Tokens.active-textMuted;
+                        font-size: Tokens.font-body;
+                    }
+                }
+                Slider {
+                    minimum: 0;
+                    maximum: 100;
+                    value <=> root.intensity;
+                }
+            }
+
+            HorizontalLayout {
+                spacing: 8px;
+
+                // Chips
+                for label[idx] in ["Low", "Medium", "High"] : Rectangle {
+                    border-radius: 999px;
+                    border-width: 1px;
+                    border-color: Tokens.active-outline;
+                    background: root.selected-chip == idx ? Tokens.active-primary : Tokens.active-surfaceAlt;
+                    animate background { duration: Tokens.fast; }
+
+                    HorizontalLayout {
+                        padding-left: 12px; padding-right: 12px;
+                        padding-top: 8px; padding-bottom: 8px;
+                        Text {
+                            text: label;
+                            color: root.selected-chip == idx ? Tokens.active-onPrimary : Tokens.active-text;
+                            font-size: Tokens.font-label;
+                            font-weight: Tokens.weight-label;
+                        }
+                    }
+
+                    TouchArea {
+                        clicked => { root.selected-chip = idx; }
+                    }
+                }
+            }
+        }
+    }
+}

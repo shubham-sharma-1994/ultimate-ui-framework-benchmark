@@ -1,0 +1,52 @@
+import { Tokens } from "tokens.slint";
+import { Page1 } from "page1.slint";
+import { Page2 } from "page2.slint";
+
+
+import { ItemData } from "item_data.slint";
+
+export component App inherits Window {
+    title: "Pulse";
+    width: 390px;
+    height: 844px;
+    background: Tokens.active-background;
+    default-font-family: "Inter";
+
+    in-out property <[ItemData]> items;
+    in-out property <int> taps: 0;
+
+    // Page routing
+    in-out property <int> current-page: 1;
+    in-out property <ItemData> selected-item;
+
+    // Callbacks
+    callback theme-toggled();
+    callback item-tapped(int);
+    callback back-tapped();
+
+    Rectangle {
+        width: 100%;
+        height: 100%;
+
+        // Simple page transition: page 2 slides in from right, page 1 fades
+        page1 := Page1 {
+            items: root.items;
+            taps: root.taps;
+            theme-toggled => { root.theme-toggled(); }
+            item-tapped(id) => { root.item-tapped(id); }
+
+            opacity: root.current-page == 1 ? 1.0 : 0.6;
+            x: root.current-page == 1 ? 0px : - root.width * 0.1;
+            animate opacity, x { duration: Tokens.base; }
+        }
+
+        page2 := Page2 {
+            item: root.selected-item;
+            back-tapped => { root.back-tapped(); }
+
+            opacity: root.current-page == 2 ? 1.0 : 0.0;
+            x: root.current-page == 2 ? 0px : root.width * 0.3;
+            animate opacity, x { duration: Tokens.base; }
+        }
+    }
+}

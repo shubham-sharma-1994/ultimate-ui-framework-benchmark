@@ -1,0 +1,54 @@
+import { Tokens } from "../tokens.slint";
+
+export component DragCard {
+    width: 240px;
+    height: 240px;
+
+    Rectangle {
+        width: 100%; height: 100%;
+        border-radius: 20px;
+        background: Tokens.active-surfaceAlt;
+
+        property <length> ox: 240px/2 - 48px;
+        property <length> oy: 240px/2 - 48px;
+
+        card := Rectangle {
+            x: ox;
+            y: oy;
+            width: 96px; height: 96px;
+            border-radius: 20px;
+            background: Tokens.active-primary;
+
+            // animate back to center with overshoot
+            animate x, y {
+                duration: Tokens.slow;
+                easing: cubic-bezier(0.3, 1.5, 0.4, 1.0); // overshoot approx
+            }
+
+            TouchArea {
+                width: 100%; height: 100%;
+                property <length> start-x;
+                property <length> start-y;
+
+                pointer-event(evt) => {
+                    if (evt.button == PointerEventButton.left && evt.kind == PointerEventKind.down) {
+                        start-x = card.x - root.absolute-position.x;
+                        start-y = card.y - root.absolute-position.y;
+                    }
+                    if (evt.button == PointerEventButton.left && evt.kind == PointerEventKind.up) {
+                        // Release, snap back
+                        ox = 240px/2 - 48px;
+                        oy = 240px/2 - 48px;
+                    }
+                }
+                moved => {
+                    if (self.pressed) {
+                        // Simple drag logic (Slint lacks a direct drag delta, we use absolute pointer)
+                        ox = self.mouse-x - 48px;
+                        oy = self.mouse-y - 48px;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,35 @@
+import { Tokens } from "../tokens.slint";
+
+export component Orbit {
+    width: 80px;
+    height: 80px;
+
+    Rectangle {
+        width: 80px;
+        height: 80px;
+        border-width: 2px;
+        border-color: Tokens.active-text;
+        border-radius: 40px;
+        opacity: 0.2;
+    }
+
+    // Slint lacks a built-in rotation animation that repeats infinitely easily without a timer in rust,
+    // but we can use an animation on an angle property with loop.
+    property <angle> rot;
+
+    // Animation loop trick in Slint:
+    // We bind a property to animation-tick()! Actually Slint has animation-tick() built-in.
+    property <duration> tick: animation-tick();
+    rot: Math.mod(tick / 1ms, 3000) / 3000.0 * 360deg;
+
+    // 3 dots circling the ring
+    for i in 3 : Rectangle {
+        property <angle> a: rot + (i * 120deg);
+        x: 40px - 6px + Math.cos(a) * 40px;
+        y: 40px - 6px + Math.sin(a) * 40px;
+        width: 12px;
+        height: 12px;
+        border-radius: 6px;
+        background: Tokens.active-onPrimary;
+    }
+}

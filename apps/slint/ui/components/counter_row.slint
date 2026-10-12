@@ -1,0 +1,55 @@
+import { Tokens } from "../tokens.slint";
+
+export component CounterRow {
+    in-out property <int> taps;
+    callback inc-tapped();
+    callback reset-tapped();
+
+    // Shake animation state
+    in property <length> shake-offset: 0px;
+
+    HorizontalLayout {
+        alignment: space-between;
+
+        VerticalLayout {
+            alignment: center;
+            Text {
+                text: "Taps";
+                color: Tokens.active-textMuted;
+                font-size: Tokens.font-label;
+                font-weight: Tokens.weight-label;
+            }
+            Text {
+                text: taps;
+                color: Tokens.active-text;
+                font-size: Tokens.font-display;
+                font-weight: Tokens.weight-display;
+                // Add shake offset
+                x: parent.width/2 - self.width/2 + shake-offset;
+            }
+        }
+
+        Rectangle {
+            property <float> scale: ta.pressed ? 0.96 : 1.0;
+            animate scale { duration: Tokens.fast; }
+            width: 56px * scale;
+            height: 56px * scale;
+            border-radius: 14px;
+            background: ta.pressed ? Tokens.active-primary.darker(10%) : Tokens.active-primary;
+
+            Text {
+                text: "+";
+                color: Tokens.active-onPrimary;
+                font-size: Tokens.font-display;
+                font-weight: Tokens.weight-display;
+                horizontal-alignment: center;
+                vertical-alignment: center;
+            }
+
+            ta := TouchArea {
+                clicked => { root.inc-tapped(); }
+                double-clicked => { root.reset-tapped(); }
+            }
+        }
+    }
+}

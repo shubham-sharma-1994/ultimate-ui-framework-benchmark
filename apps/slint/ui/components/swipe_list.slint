@@ -1,0 +1,52 @@
+import { Tokens } from "../tokens.slint";
+
+export component SwipeList {
+    // Basic mock of swipe-to-dismiss list
+    VerticalLayout {
+        spacing: 8px;
+        for i in 3 : Rectangle {
+            height: 56px;
+            background: #E5484D; // red background
+            border-radius: 14px;
+
+            property <length> offset: 0px;
+            property <bool> dismissed: false;
+
+            Rectangle {
+                x: offset;
+                width: 100%; height: 100%;
+                background: Tokens.active-surface;
+                border-radius: 14px;
+
+                Text {
+                    text: "Item " + (i + 1);
+                    x: 16px;
+                    vertical-alignment: center;
+                }
+
+                TouchArea {
+                    // Simple drag
+                    moved => {
+                        if (self.pressed) {
+                            offset = Math.max(-self.width, self.mouse-x - start-x);
+                        }
+                    }
+                    property <length> start-x;
+                    pointer-event(evt) => {
+                        if (evt.button == PointerEventButton.left && evt.kind == PointerEventKind.down) {
+                            start-x = self.mouse-x - offset;
+                        }
+                        if (evt.button == PointerEventButton.left && evt.kind == PointerEventKind.up) {
+                            if (offset < -self.width * 0.4) {
+                                dismissed = true;
+                                offset = -self.width;
+                            } else {
+                                offset = 0px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
