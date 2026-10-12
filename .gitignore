@@ -18,3 +18,7 @@ apps/ionic/android/.gradle/
 apps/ionic/android/app/build/
 apps/ionic/android/local.properties
 apps/ionic/android/captures/
+apps/ionic/node_modules
+apps/ionic/dist
+apps/ionic/android/.gradle
+apps/ionic/android/app/build
