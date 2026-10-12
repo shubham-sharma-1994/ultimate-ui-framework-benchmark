@@ -33,3 +33,8 @@ However, replicating the highly dynamic, custom-painted design of the "Pulse" ap
 **Cons:**
 - XAML is verbose for complex UI interactions and continuous animations.
 - Lacks the out-of-the-box flexibility of declarative, implicitly animated frameworks like Flutter for heavily custom, non-standard UI designs.
+
+### Round 2
+During Round 2, we looked into upgrading implicit animations and spring physics capabilities. WinUI natively switches themes instantly when using `RequestedTheme`, and it lacks built-in full-screen interpolated cross-fade APIs out of the box. Following the compatibility rules (no custom hacks), C14 (Animated theme switch) remains skipped.
+
+For C07 (Spring physics on drag release), we were able to upgrade it from an approximated Storyboard with `ElasticEase` to true spring physics using the Composition API (`SpringVector3NaturalMotionAnimation`), which provides a much more robust and "natural" animation feel mimicking Flutter's spring simulations.

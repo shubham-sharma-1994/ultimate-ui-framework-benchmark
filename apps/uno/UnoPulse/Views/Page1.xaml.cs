@@ -79,27 +79,27 @@ public sealed partial class Page1 : Page
 
     private void AnimateCounter()
     {
-        CounterText.Text = _taps.ToString();
-        var sb = new Storyboard();
+        var visual = Microsoft.UI.Xaml.Hosting.ElementCompositionPreview.GetElementVisual(CounterText);
+        var compositor = visual.Compositor;
 
-        var slideOut = new DoubleAnimation
+        var slideOut = compositor.CreateScalarKeyFrameAnimation();
+        slideOut.InsertKeyFrame(0f, 0f);
+        slideOut.InsertKeyFrame(1f, -40f);
+        slideOut.Duration = TimeSpan.FromMilliseconds(150);
+
+        var slideIn = compositor.CreateScalarKeyFrameAnimation();
+        slideIn.InsertKeyFrame(0f, 40f);
+        slideIn.InsertKeyFrame(1f, 0f);
+        slideIn.Duration = TimeSpan.FromMilliseconds(150);
+
+        var batch = compositor.CreateScopedBatch(Microsoft.UI.Composition.CompositionBatchTypes.Animation);
+        visual.StartAnimation("Translation.Y", slideOut);
+        batch.Completed += (s, e) =>
         {
-            From = 0, To = -40, Duration = TimeSpan.FromMilliseconds(150)
+            CounterText.Text = _taps.ToString();
+            visual.StartAnimation("Translation.Y", slideIn);
         };
-        Storyboard.SetTarget(slideOut, CounterTranslate);
-        Storyboard.SetTargetProperty(slideOut, "Y");
-
-        var slideIn = new DoubleAnimation
-        {
-            From = 40, To = 0, Duration = TimeSpan.FromMilliseconds(150),
-            BeginTime = TimeSpan.FromMilliseconds(150)
-        };
-        Storyboard.SetTarget(slideIn, CounterTranslate);
-        Storyboard.SetTargetProperty(slideIn, "Y");
-
-        sb.Children.Add(slideOut);
-        sb.Children.Add(slideIn);
-        sb.Begin();
+        batch.End();
     }
 
     private void OnScrollViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
@@ -117,7 +117,12 @@ public sealed partial class Page1 : Page
     private void OnNameTextChanged(object sender, TextChangedEventArgs e)
     {
         GreetingText.Text = $"Hello, {NameInput.Text}";
-        GreetingText.Opacity = string.IsNullOrEmpty(NameInput.Text) ? 0 : 1;
+        var visual = Microsoft.UI.Xaml.Hosting.ElementCompositionPreview.GetElementVisual(GreetingText);
+        var compositor = visual.Compositor;
+        var anim = compositor.CreateScalarKeyFrameAnimation();
+        anim.InsertKeyFrame(1f, string.IsNullOrEmpty(NameInput.Text) ? 0f : 1f);
+        anim.Duration = TimeSpan.FromMilliseconds(250);
+        visual.StartAnimation("Opacity", anim);
     }
 
     private void OnItemTapped(object sender, TappedRoutedEventArgs e)

@@ -12,12 +12,12 @@ Version used: 6.7.30 · Language: C# · Rendering model: native widgets (WinUI 3
 | ID | Status | Notes / how approximated / why skipped |
 |---|---|---|
 | C01 | ⚠️ | Custom-painted orbit approximated with standard XAML `Ellipse` and `Storyboard` (RenderTransform) instead of per-frame custom paint. Continuous gradients not supported as an engine core, used basic LinearGradientBrush. |
-| C02 | ⚠️ | Approximated using `VisualStateManager` and manual `Storyboard` since WinUI doesn't support implicit property animations for everything out-of-the-box like Flutter. |
+| C02 | ⚠️ | Partially upgraded to true Composition implicit animation for opacity on page 1, but most other properties remain approximated since WinUI doesn't support Flutter-like implicit animations. |
 | C03 | ✅ | Staggered entrance approximated with custom EntranceThemeTransition or Storyboard stagger. |
 | C04 | ✅ | Used WinUI `ConnectedAnimationService` for hero element transition. |
 | C05 | ✅ | Used `NavigationThemeTransition` with `SlideNavigationTransitionInfo`. |
-| C06 | ⚠️ | Approximated with standard `Storyboard` for slide up / fade out. |
-| C07 | ⚠️ | Approximated using Composition `SpringVector3NaturalMotionAnimation` or `Storyboard` SplineDoubleKeyFrame. |
+| C06 | ✅ | Used Composition `ScalarKeyFrameAnimation` for a true composition-driven translation slide up/down on number switch. |
+| C07 | ✅ | Used Composition `SpringVector3NaturalMotionAnimation` for real spring physics on card release. |
 | C08 | ✅ | Used `ManipulationDelta` for drag, `SwipeControl` for swipe-to-dismiss, `Holding` for long-press. |
 | C09 | ⚠️ | Approximated using `ScrollViewer.ViewChanged` event to manually adjust header height and translation. |
 | C10 | ⚠️ | Progress ring approximated with an Arc segment animated using a Storyboard on its sweep angle instead of a true custom paint loop. |
