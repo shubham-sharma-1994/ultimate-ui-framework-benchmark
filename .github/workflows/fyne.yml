@@ -1,0 +1,100 @@
+name: Fyne Pulse App
+
+on:
+  push:
+    paths:
+      - 'apps/fyne/**'
+      - '.github/workflows/fyne.yml'
+  pull_request:
+    paths:
+      - 'apps/fyne/**'
+      - '.github/workflows/fyne.yml'
+  workflow_dispatch:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.x'
+          cache-dependency-path: 'apps/fyne/go.sum'
+      - name: Install fyne CLI
+        run: go install fyne.io/fyne/v2/cmd/fyne@latest
+      - name: Build Web (WASM)
+        run: |
+          cd apps/fyne
+          fyne package -os wasm
+        continue-on-error: true # Web is experimental in Fyne
+      - name: Upload Web Artifact
+        uses: actions/upload-artifact@v4
+        if: success() || failure()
+        with:
+          name: fyne-web
+          path: apps/fyne/wasm
+          retention-days: 30
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.x'
+          cache-dependency-path: 'apps/fyne/go.sum'
+      - name: Setup Android NDK
+        uses: nttld/setup-ndk@v1
+        with:
+          ndk-version: r26b
+          add-to-path: true
+      - name: Install fyne CLI
+        run: go install fyne.io/fyne/v2/cmd/fyne@latest
+      - name: Setup dependencies
+        run: sudo apt-get update && sudo apt-get install -y gcc libgl1-mesa-dev xorg-dev
+      - name: Build Android
+        run: |
+          cd apps/fyne
+          fyne package -os android -appID com.example.pulsefyne
+          mv *.apk app-fyne.apk
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fyne-android
+          path: apps/fyne/app-fyne.apk
+          retention-days: 30
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.24.x'
+          cache-dependency-path: 'apps/fyne/go.sum'
+      - name: Install MSYS2 & GCC
+        uses: msys2/setup-msys2@v2
+        with:
+          install: mingw-w64-x86_64-gcc
+          path-type: inherit
+      - name: Install fyne CLI
+        run: go install fyne.io/fyne/v2/cmd/fyne@latest
+      - name: Build Windows
+        run: |
+          cd apps/fyne
+          fyne package -os windows -name pulse-fyne.exe
+        shell: msys2 {0}
+      - name: Prepare Windows zip
+        run: |
+          cd apps/fyne
+          Compress-Archive -Path pulse-fyne.exe -DestinationPath app-fyne-windows.zip
+        shell: powershell
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: fyne-windows
+          path: apps/fyne/app-fyne-windows.zip
+          retention-days: 30
