@@ -29,6 +29,7 @@ jobs:
           target: 'desktop'
           arch: 'gcc_64'
           cache: true
+          install-deps: 'false'
           dir: '${{ github.workspace }}/Qt'
       - name: Install Qt (Wasm)
         uses: jurplel/install-qt-action@v3
@@ -36,8 +37,9 @@ jobs:
           version: '6.5.3'
           host: 'linux'
           target: 'desktop'
-          arch: 'wasm_32'
+          arch: 'wasm_singlethread'
           cache: true
+          install-deps: 'false'
           dir: '${{ github.workspace }}/Qt'
       - name: Install Ninja
         run: sudo apt-get update && sudo apt-get install -y ninja-build
@@ -76,6 +78,7 @@ jobs:
           target: 'android'
           arch: 'android_armv7'
           cache: true
+          install-deps: 'false'
       - name: Build Android
         working-directory: apps/qt
         run: |
@@ -109,6 +112,7 @@ jobs:
           target: 'desktop'
           arch: 'win64_msvc2019_64'
           cache: true
+          install-deps: 'false'
       - name: Build Windows
         working-directory: apps/qt
         run: |
