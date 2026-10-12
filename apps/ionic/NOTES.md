@@ -6,7 +6,7 @@ Version used: 8.3.3 (Ionic), React 18.3.1 · Language: TypeScript · Rendering m
 |---|---|---|
 | Web | ✅ | Supported via standard React build |
 | Android | ✅ | Supported via Capacitor |
-| Windows | ⏭️ | Skipped due to lack of straight-forward support / Electron Capacitor requirement overhead. |
+| Windows | ✅ | Supported via Capacitor Community Electron wrapper. |
 
 ## Capabilities (see spec/DESIGN.md §9)
 | ID | Status | Notes / how approximated / why skipped |
@@ -46,3 +46,4 @@ Version used: 8.3.3 (Ionic), React 18.3.1 · Language: TypeScript · Rendering m
 - Dev server: `ionic serve`
 - Web build: `ionic build` (outputs to `dist/`)
 - Android build: `ionic build && npx cap sync android && npx cap open android`
+- Windows build: `ionic build && npx cap add @capacitor-community/electron && cd electron && npm run electron:make`
