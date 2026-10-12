@@ -32,3 +32,8 @@ Building the "Pulse" app in Ionic React provided a clear view into the strengths
 - Fighting the framework: If the design strays too far from standard iOS/Android paradigms (e.g., highly custom layout transitions and physics), you end up writing custom DOM implementations rather than using Ionic components.
 - DOM overhead vs Canvas when stressing complex animations.
 - Shared element transitions in web-views are inherently tricky.
+
+## Round 2
+*   **Capacitor Windows:** Since official Capacitor Windows support was deprecated and moved to the community (`@capacitor-community/electron`), setting it up required using that wrapper instead.
+*   **Electron Wrapper:** The Capacitor Electron plugin works well by simply pulling in the built web app from `dist/` and providing a ready-to-use electron shell around it. Modifying `electron-builder.config.json` was necessary to output a portable `zip` suitable for this benchmark's artifacts, bypassing more complex installers or AppImages.
+*   **Linux Compilation:** Running `electron-builder` on Linux for a Windows target using `wine` works locally with some effort, but it's simpler and more robust to use a `windows-latest` runner on GitHub Actions to ensure a clean build environment for the `.zip` artifact.

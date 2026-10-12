@@ -2,6 +2,24 @@ namespace Pulse;
 
 public partial class DetailPage : ContentPage
 {
+    private void OnPointerEntered(object sender, PointerEventArgs e)
+    {
+        if (sender is View view)
+        {
+            view.FadeTo(0.8, 150);
+            view.ScaleTo(1.02, 150);
+        }
+    }
+
+    private void OnPointerExited(object sender, PointerEventArgs e)
+    {
+        if (sender is View view)
+        {
+            view.FadeTo(1, 150);
+            view.ScaleTo(1, 150);
+        }
+    }
+
     private ProgressRingDrawable _ringDrawable;
     private IDispatcherTimer _ringTimer;
     private ItemData _item;
@@ -128,6 +146,7 @@ public partial class DetailPage : ContentPage
         switch (e.StatusType)
         {
             case GestureStatus.Started:
+                this.AbortAnimation("SpringBack");
                 _dragStartX = DragCard.TranslationX;
                 _dragStartY = DragCard.TranslationY;
                 break;
@@ -137,8 +156,34 @@ public partial class DetailPage : ContentPage
                 break;
             case GestureStatus.Completed:
             case GestureStatus.Canceled:
-                // Spring back (approximated with custom easing)
-                _ = DragCard.TranslateTo(0, 0, 500, Easing.SpringOut);
+                // C07 Real Spring Simulation
+                var startX = DragCard.TranslationX;
+                var startY = DragCard.TranslationY;
+                var velocityX = 0.0;
+                var velocityY = 0.0;
+                var stiffness = 150.0;
+                var damping = 12.0;
+                var mass = 1.0;
+
+                var anim = new Animation(v =>
+                {
+                    var dt = 0.016;
+                    var forceX = -stiffness * DragCard.TranslationX - damping * velocityX;
+                    var accX = forceX / mass;
+                    velocityX += accX * dt;
+                    DragCard.TranslationX += velocityX * dt;
+
+                    var forceY = -stiffness * DragCard.TranslationY - damping * velocityY;
+                    var accY = forceY / mass;
+                    velocityY += accY * dt;
+                    DragCard.TranslationY += velocityY * dt;
+                });
+
+                anim.Commit(this, "SpringBack", 16, 1000, Easing.Linear, (v, c) =>
+                {
+                    DragCard.TranslationX = 0;
+                    DragCard.TranslationY = 0;
+                });
                 break;
         }
     }

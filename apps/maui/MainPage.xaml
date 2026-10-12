@@ -13,7 +13,7 @@
         </LinearGradientBrush>
     </ContentPage.Resources>
 
-    <Grid RowDefinitions="56, *">
+    <Grid x:Name="RootGrid" RowDefinitions="56, *">
         <!-- App bar -->
         <Grid x:Name="AppBar" Grid.Row="0" BackgroundColor="{DynamicResource SurfaceColor}" Padding="16,0" ZIndex="10">
             <Grid.Shadow>
@@ -46,6 +46,7 @@
                     <Button Grid.Column="1" x:Name="CounterInc" AutomationId="counter-inc" Text="+" WidthRequest="56" HeightRequest="56" CornerRadius="16" Clicked="OnCounterIncClicked">
                         <Button.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnCounterIncClicked" />
+                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited" />
                             <!-- Simulate long press through platform specific or simple click holding -->
                             <!-- Note: Natively MAUI doesnt have a LongPress on Button without custom renderers or behaviors. -->
                         </Button.GestureRecognizers>
@@ -72,18 +73,21 @@
                             <Border x:Name="ChipLow" AutomationId="chip-low" StrokeShape="RoundRectangle 999" BackgroundColor="{DynamicResource PrimaryColor}" StrokeThickness="0" Padding="12,6">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnChipClicked" CommandParameter="Low"/>
+                                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited" />
                                 </Border.GestureRecognizers>
                                 <Label Text="Low" Style="{DynamicResource LabelStyle}" TextColor="{DynamicResource OnPrimaryColor}" />
                             </Border>
                             <Border x:Name="ChipMedium" AutomationId="chip-medium" StrokeShape="RoundRectangle 999" BackgroundColor="{DynamicResource SurfaceAltColor}" StrokeThickness="0" Padding="12,6">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnChipClicked" CommandParameter="Medium"/>
+                                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited" />
                                 </Border.GestureRecognizers>
                                 <Label Text="Medium" Style="{DynamicResource LabelStyle}" TextColor="{DynamicResource TextColor}" />
                             </Border>
                             <Border x:Name="ChipHigh" AutomationId="chip-high" StrokeShape="RoundRectangle 999" BackgroundColor="{DynamicResource SurfaceAltColor}" StrokeThickness="0" Padding="12,6">
                                 <Border.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnChipClicked" CommandParameter="High"/>
+                                    <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited" />
                                 </Border.GestureRecognizers>
                                 <Label Text="High" Style="{DynamicResource LabelStyle}" TextColor="{DynamicResource TextColor}" />
                             </Border>

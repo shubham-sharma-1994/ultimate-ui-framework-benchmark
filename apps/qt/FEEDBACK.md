@@ -28,3 +28,9 @@ Building "Pulse" in Qt Quick (QML) highlighted both the immense power of Qt's de
 - Missing out-of-the-box "modern" app transition patterns like shared-element routing.
 - The default component sets can be difficult to micro-style without rebuilding them from scratch.
 - The SDK footprint and build times are significantly heavier than web frameworks.
+
+## Round 2
+
+- **WebAssembly Integration (C16):** Implementing history navigation for WebAssembly targets in Qt required breaking out of QML/C++ and writing direct Emscripten JavaScript callbacks (`EM_ASM`). This is quite powerful since Qt sets up the Emscripten environment well, but it adds boilerplate to connect JS `popstate` events to C++ signals, and then back up to QML's `StackView` to pop the router. It highlights that for standard web features (like back button), Qt Wasm apps feel more like embedded canvas elements than standard web apps unless manually wired up.
+- **Hero Animations (C04):** QML's `StackView` does not have a native "shared element transition" API. Approximating the hero flight required creating a global, absolutely-positioned `Rectangle` overlay on the root `Window`, grabbing coordinates via `mapToItem`, animating it manually in parallel to the `StackView` push transition, and then swapping visibilities. This is cumbersome and manual compared to frameworks that have native Hero widgets, but it's achievable given QML's declarative animations.
+- **WebAssembly CI Tooling:** Setting up reliable WebAssembly CI with Qt requires downloading heavy toolchains, and the standard action (`jurplel/install-qt-action`) can fail sporadically (e.g. XML parsing errors when fetching archives). Disabling the cache for Wasm target helps alleviate state corruption in the CI environment.

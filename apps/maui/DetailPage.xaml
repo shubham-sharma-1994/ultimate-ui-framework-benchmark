@@ -28,6 +28,7 @@
                     <Grid HorizontalOptions="Center" WidthRequest="120" HeightRequest="120">
                         <Grid.GestureRecognizers>
                             <TapGestureRecognizer Tapped="OnRingTapped" />
+                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited" />
                         </Grid.GestureRecognizers>
                         <GraphicsView x:Name="RingView" AutomationId="ring" Drawable="{StaticResource ProgressRingDrawable}" />
                         <Label x:Name="RingLabel" Text="0%" Style="{DynamicResource Title}" TextColor="{DynamicResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center" />
@@ -39,6 +40,7 @@
                             <Grid Padding="16" ColumnDefinitions="*, Auto">
                                 <Grid.GestureRecognizers>
                                     <TapGestureRecognizer Tapped="OnAccordionTapped" />
+                            <PointerGestureRecognizer PointerEntered="OnPointerEntered" PointerExited="OnPointerExited" />
                                 </Grid.GestureRecognizers>
                                 <Label Text="Details" Style="{DynamicResource Title}" TextColor="{DynamicResource TextColor}" VerticalOptions="Center" />
                                 <Label x:Name="AccordionChevron" Text="v" Style="{DynamicResource Title}" TextColor="{DynamicResource TextColor}" Grid.Column="1" VerticalOptions="Center" />

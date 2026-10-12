@@ -38,6 +38,8 @@ Targets: ✅ built · ⚠️ partial / experimental (CI job marked non-blocking)
 | Electron | `apps/electron` | ✅ | ⏭️ | ✅ | 16 | 2 | 0 | [NOTES](apps/electron/NOTES.md) · [FEEDBACK](apps/electron/FEEDBACK.md) |
 | Quasar | `apps/quasar` | ✅ | ✅ | ⏭️ | 16 | 1 | 1 | [NOTES](apps/quasar/NOTES.md) · [FEEDBACK](apps/quasar/FEEDBACK.md) |
 
+> ⚠️ **Dioxus correction:** the round-1 Dioxus app that was merged contained only a stub (`println!("Hello, world!")`), although its `NOTES.md` claimed 12/18 capabilities. This was found in round 2 and the app is being rebuilt from scratch; treat the Dioxus row as invalid until that lands. Lesson: green CI + self-reported notes is not proof of an implemented app — verify visually.
+
 CI: every framework has `.github/workflows/<fw>.yml`; artifacts are named `<fw>-web`, `<fw>-android`, `<fw>-windows` (see [`spec/CI.md`](spec/CI.md)). Jobs marked `continue-on-error` in a workflow are known-fragile (e.g. Qt/Fyne WebAssembly, MAUI/Tauri packaging) — check the run before relying on that artifact.
 
 ## Artifacts

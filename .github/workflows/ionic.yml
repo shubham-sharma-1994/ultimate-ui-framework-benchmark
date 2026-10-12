@@ -79,3 +79,42 @@ jobs:
           name: ionic-android
           path: apps/ionic/android/app/build/outputs/apk/release/app-release-unsigned.apk
           retention-days: 30
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+          cache-dependency-path: apps/ionic/package-lock.json
+
+      - name: Install root dependencies
+        working-directory: apps/ionic
+        run: npm ci
+
+      - name: Install electron dependencies
+        working-directory: apps/ionic/electron
+        run: npm install
+
+      - name: Build Web
+        working-directory: apps/ionic
+        run: npm run build
+
+      - name: Sync Electron
+        working-directory: apps/ionic
+        run: npx cap sync electron
+
+      - name: Build Windows App
+        working-directory: apps/ionic/electron
+        run: npm run electron:make
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ionic-windows
+          path: apps/ionic/electron/dist/*.zip
+          retention-days: 30
