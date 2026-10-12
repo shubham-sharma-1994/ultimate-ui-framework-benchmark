@@ -1,0 +1,48 @@
+name: Release all builds
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (default: builds-<UTC timestamp>)'
+        required: false
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+    steps:
+      - name: Collect newest artifact per name from the default branch
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          gh api --paginate "repos/$REPO/actions/artifacts?per_page=100" \
+            --jq '.artifacts[] | select(.expired==false) | [.name,.id,.created_at,.size_in_bytes] | @tsv' \
+            | sort -t$'\t' -k1,1 -k3,3r | awk -F'\t' '!seen[$1]++' > latest.tsv
+          cat latest.tsv
+          while IFS=$'\t' read -r name id created size; do
+            echo "downloading $name ($id, $size bytes)"
+            gh api "repos/$REPO/actions/artifacts/$id/zip" > "dist/$name.zip"
+          done < latest.tsv
+          ls -la dist
+      - name: Create release
+        run: |
+          set -euo pipefail
+          TAG="${{ github.event.inputs.tag }}"
+          [ -n "$TAG" ] || TAG="builds-$(date -u +%Y%m%d-%H%M)"
+          {
+            echo "All CI build artifacts (Web / Android / Windows) per framework, newest successful build of each."
+            echo
+            echo "Each asset is the zipped CI artifact. Source commit: \`${GITHUB_SHA}\`."
+            echo
+            echo "| Artifact | Built (UTC) |"
+            echo "|---|---|"
+            awk -F'\t' '{print "| "$1" | "$3" |"}' latest.tsv | sort
+          } > notes.md
+          gh release create "$TAG" dist/*.zip --repo "$REPO" --target "$GITHUB_SHA" --title "Pulse benchmark builds ($TAG)" --notes-file notes.md --prerelease
