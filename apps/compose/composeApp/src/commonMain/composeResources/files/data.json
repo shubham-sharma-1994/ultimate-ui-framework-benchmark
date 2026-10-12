@@ -1,0 +1,10 @@
+{
+  "items": [
+    {"id": 1, "title": "Aurora",   "subtitle": "Gradient engine",    "score": 92, "colors": ["#6750A4", "#FF7A59"], "body": "Smooth multi-stop gradients rendered per frame. Aurora stresses fill-rate and blending."},
+    {"id": 2, "title": "Ripple",   "subtitle": "Touch feedback",     "score": 78, "colors": ["#2E9E6B", "#6BD5FF"], "body": "Layered touch feedback and hover states. Ripple stresses input latency and hit-testing."},
+    {"id": 3, "title": "Cascade",  "subtitle": "Staggered lists",    "score": 85, "colors": ["#FF7A59", "#FFD166"], "body": "Staggered entrances over long lists. Cascade stresses layout, animation scheduling and GC."},
+    {"id": 4, "title": "Orbit",    "subtitle": "Custom painting",    "score": 67, "colors": ["#3A86FF", "#8338EC"], "body": "Continuous custom-drawn animation at display refresh rate. Orbit stresses the paint pipeline."},
+    {"id": 5, "title": "Spring",   "subtitle": "Physics & gestures", "score": 74, "colors": ["#EF476F", "#FFB4A2"], "body": "Drag, release and settle with a damped spring. Spring stresses gesture handling and frame pacing."},
+    {"id": 6, "title": "Morph",    "subtitle": "Theme & transitions","score": 96, "colors": ["#118AB2", "#06D6A0"], "body": "Whole-screen colour interpolation and shared-element flights. Morph stresses compositing."}
+  ]
+}
