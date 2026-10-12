@@ -1,0 +1,34 @@
+--- apps/flutter/lib/pages/showcase.dart
++++ apps/flutter/lib/pages/showcase.dart
+@@ -232,15 +232,16 @@
+           Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+             children: [
+               Text('Notifications', style: theme.textTheme.bodyLarge),
+               Switch(
+                 key: const Key('switch'),
+                 value: _notificationsEnabled,
++                onChanged: (v) => setState(() => _notificationsEnabled = v),
++                // ignore: deprecated_member_use
++                activeColor: theme.primaryColor,
+               ),
+             ],
+           ),
+           const SizedBox(height: 16),
+           Row(
+@@ -248,12 +249,15 @@
+             children: [
+               Text('Intensity', style: theme.textTheme.bodyLarge),
+               Text('${_intensity.round()}', style: theme.textTheme.labelLarge),
+             ],
+           ),
+           Slider(
+             key: const Key('slider'),
+             value: _intensity,
+             min: 0,
+             max: 100,
++            onChanged: (v) => setState(() => _intensity = v),
++            // ignore: deprecated_member_use
++            activeColor: theme.primaryColor,
+           ),
+           const SizedBox(height: 16),
