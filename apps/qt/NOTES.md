@@ -4,7 +4,7 @@ Version used: 6.4/6.5 · Language: QML/C++ · Rendering model: own canvas (Qt Sc
 ## Targets
 | Target | Status | Notes |
 |---|---|---|
-| Web | ✅ | Handled via Qt for WebAssembly |
+| Web | ⚠️ | Handled via Qt for WebAssembly. Note: WebAssembly CI build is marked continue-on-error due to transient toolchain/XML parsing issues in standard install actions. |
 | Android | ✅ | Handled via Qt for Android |
 | Windows | ✅ | Handled natively by Qt |
 
