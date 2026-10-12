@@ -40,5 +40,5 @@ Version used: .NET 8.0 · Language: C# / XAML · Rendering model: Native Widgets
 ## How to run / build
 **Note:** Compiling in a pure Linux CLI environment may fail due to workload incompatibilities. Use Visual Studio 2022 on Windows or a clean CI pipeline.
 
-- `dotnet build -c Release -f net8.0-android`
-- `dotnet build -c Release -f net8.0-windows10.0.19041.0`
+- `dotnet build -c Release -f net9.0-android`
+- `dotnet build -c Release -f net9.0-windows10.0.19041.0`
