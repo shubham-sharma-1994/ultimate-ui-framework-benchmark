@@ -1,0 +1,10 @@
+{
+  "background_color": "#ffffff",
+  "description": "UnoPulse",
+  "display": "standalone",
+  "name": "UnoPulse",
+  "short_name": "UnoPulse",
+  "start_url": "/index.html",
+  "theme_color": "#ffffff",
+  "scope": "/"
+}
