@@ -1,0 +1,100 @@
+name: Tauri Pulse App
+
+on:
+  push:
+    paths:
+      - 'apps/tauri/**'
+      - '.github/workflows/tauri.yml'
+  pull_request:
+    paths:
+      - 'apps/tauri/**'
+      - '.github/workflows/tauri.yml'
+  workflow_dispatch:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: apps/tauri/package-lock.json
+      - name: Install dependencies
+        working-directory: apps/tauri
+        run: npm ci
+      - name: Build Web
+        working-directory: apps/tauri
+        run: npm run build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tauri-web
+          path: apps/tauri/dist
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: apps/tauri/package-lock.json
+      - name: Install dependencies
+        working-directory: apps/tauri
+        run: npm ci
+      - name: Build Windows
+        working-directory: apps/tauri
+        run: npm run tauri build
+      - name: Prepare artifact
+        working-directory: apps/tauri
+        run: |
+          mkdir tauri-windows
+          cp src-tauri/target/release/appstauri.exe tauri-windows/Pulse.exe
+          Compress-Archive -Path tauri-windows/* -DestinationPath app-tauri-windows.zip
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tauri-windows
+          path: apps/tauri/app-tauri-windows.zip
+
+  android:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: apps/tauri/package-lock.json
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android, armv7-linux-androideabi, i686-linux-android, x86_64-linux-android
+      - name: Install dependencies
+        working-directory: apps/tauri
+        run: npm ci
+      - name: Tauri Android Init
+        working-directory: apps/tauri
+        run: npm run tauri android init
+      - name: Build Android
+        working-directory: apps/tauri
+        run: npm run tauri android build
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tauri-android
+          path: apps/tauri/src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-unsigned.apk
