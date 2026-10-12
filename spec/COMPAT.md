@@ -12,3 +12,9 @@
 5. Don't redesign. Colours, sizes, durations and curves come from DESIGN.md only.
 6. Escalate (ask in the Jules session) only when blocked on something that isn't covered by rules 1–5.
 7. Never edit files outside `apps/<fw>/` and `.github/workflows/<fw>.yml`.
+
+## Skip granularity (added after round 1)
+- **Skip the feature, not the platform.** If a few capabilities (say a, b, c) are very hard on a platform, skip only those and build the rest.
+- **Skip the whole platform only if** almost everything on it is hard — i.e. only a handful of capabilities are achievable and the majority are not. Otherwise build the platform.
+- A feature is "hard" if it needs custom native code, a non-standard plugin, or a rewrite of the framework's rendering/routing just for this demo. "Complex" alone is not a reason: if the framework's own animation/gesture/scroll APIs can do it, build it.
+- Document every skipped feature per platform in `NOTES.md` (table rows per target when they differ).
