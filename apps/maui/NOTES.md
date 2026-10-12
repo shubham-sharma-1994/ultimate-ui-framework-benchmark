@@ -14,10 +14,10 @@ Version used: .NET 8.0 · Language: C# / XAML · Rendering model: Native Widgets
 | C01 | ✅ | Custom gradient on Border, custom-painted orbit using `IDrawable`. |
 | C02 | ⚠️ | Approximated using `FadeTo`, `ScaleTo`, `TranslateTo` extension methods. MAUI doesn't have true "implicit" animations out of the box like Flutter. |
 | C03 | ⚠️ | Staggered list entrance approximated by creating items, setting initial transforms/opacity, and using a `Task.Delay` loop to animate them sequentially. |
-| C04 | ⏭️ | Hero / shared-element transition is not supported natively in MAUI out of the box without complex custom renderers or community toolkits. Skipped. |
+| C04 | ⚠️ | Hero / shared-element transition approximated using a custom Border clone animated over a root Grid to the destination size. True native shared elements are not natively supported out of the box. |
 | C05 | ⚠️ | Page transition is native MAUI NavigationPage transition. Does not perfectly match the specific spec slide+fade, but provides standard reversible navigation. |
 | C06 | ⚠️ | Animated number switcher approximated by manually cross-fading and translating two separate Labels inside a Grid. |
-| C07 | ⚠️ | Spring physics approximated using `Easing.SpringOut`. MAUI lacks a native true physics simulation engine. |
+| C07 | ⚠️ | Spring physics approximated using a custom tick-based physics simulation via MAUI's `Animation` class. MAUI lacks a native true physics simulation engine out of the box. |
 | C08 | ✅ | Gesture: drag (PanGestureRecognizer), long-press (simulated via Tapped due to lack of native LongPress), swipe-to-dismiss (SwipeView). |
 | C09 | ⚠️ | Collapsing header with parallax approximated by subscribing to ScrollView.Scrolled and modifying TranslationY. |
 | C10 | ✅ | Custom painter progress ring + count-up built using `IDrawable` and an `IDispatcherTimer`. |
@@ -27,7 +27,7 @@ Version used: .NET 8.0 · Language: C# / XAML · Rendering model: Native Widgets
 | C14 | ⚠️ | Animated theme switch partially approximated. Colours switch immediately via `AppThemeBinding`, icon rotates and fades manually. |
 | C15 | ⚠️ | Text field with floating label approximated by animating a Label above an Entry when focused. |
 | C16 | ⚠️ | Deep link skipped for now due to complexity in basic MAUI without Shell routes. |
-| C17 | ⏭️ | Keyboard & hover states skipped (basic implementation uses primarily mobile gestures). |
+| C17 | ⚠️ | Hover states approximated using `PointerGestureRecognizer` to animate scale and opacity. Native key events for Windows are unsupported out of the box so true keyboard navigation is skipped. |
 | C18 | ✅ | Accessibility labels / test ids set using `AutomationId`. |
 
 ## Native (framework-brought differences)
