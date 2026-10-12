@@ -93,18 +93,22 @@ public sealed partial class Page2 : Page
 
     private void OnCardManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
     {
-        var sb = new Storyboard();
-        var animX = new DoubleAnimation { To = 0, Duration = TimeSpan.FromMilliseconds(500), EasingFunction = new ElasticEase { EasingMode = EasingMode.EaseOut, Springiness = 5 } };
-        var animY = new DoubleAnimation { To = 0, Duration = TimeSpan.FromMilliseconds(500), EasingFunction = new ElasticEase { EasingMode = EasingMode.EaseOut, Springiness = 5 } };
+        var visual = Microsoft.UI.Xaml.Hosting.ElementCompositionPreview.GetElementVisual(DragCard);
+        var compositor = visual.Compositor;
+        var springAnimation = compositor.CreateSpringVector3Animation();
+        springAnimation.Target = "Translation";
+        springAnimation.FinalValue = new System.Numerics.Vector3(0, 0, 0);
+        springAnimation.DampingRatio = 0.5f;
+        springAnimation.Period = TimeSpan.FromMilliseconds(50);
 
-        Storyboard.SetTarget(animX, DragTransform);
-        Storyboard.SetTargetProperty(animX, "X");
-        Storyboard.SetTarget(animY, DragTransform);
-        Storyboard.SetTargetProperty(animY, "Y");
+        // Set initial value for the spring animation based on the current drag offset
+        springAnimation.InitialValue = new System.Numerics.Vector3((float)DragTransform.X, (float)DragTransform.Y, 0);
 
-        sb.Children.Add(animX);
-        sb.Children.Add(animY);
-        sb.Begin();
+        // Reset XAML Transform so we don't double-translate
+        DragTransform.X = 0;
+        DragTransform.Y = 0;
+
+        visual.StartAnimation("Translation", springAnimation);
     }
 
     private void OnSwipeInvoked(SwipeItem sender, SwipeItemInvokedEventArgs args)
