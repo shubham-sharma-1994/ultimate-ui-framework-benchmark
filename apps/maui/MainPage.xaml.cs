@@ -5,24 +5,6 @@ namespace Pulse;
 
 public partial class MainPage : ContentPage
 {
-    private void OnPointerEntered(object sender, PointerEventArgs e)
-    {
-        if (sender is View view)
-        {
-            view.FadeTo(0.8, 150);
-            view.ScaleTo(1.02, 150);
-        }
-    }
-
-    private void OnPointerExited(object sender, PointerEventArgs e)
-    {
-        if (sender is View view)
-        {
-            view.FadeTo(1, 150);
-            view.ScaleTo(1, 150);
-        }
-    }
-
     private OrbitDrawable _orbitDrawable;
     private IDispatcherTimer _orbitTimer;
     private int _taps = 0;
@@ -45,11 +27,6 @@ public partial class MainPage : ContentPage
         _orbitTimer.Start();
 
         LoadData();
-
-        // C17 Keyboard navigation support for Counter
-        var accel = new KeyboardAccelerator { Key = "Enter" };
-        accel.Invoked += (s, e) => OnCounterIncClicked(this, EventArgs.Empty);
-        this.KeyboardAccelerators.Add(accel);
     }
 
     private async void LoadData()
@@ -128,50 +105,9 @@ public partial class MainPage : ContentPage
         var tap = new TapGestureRecognizer();
         tap.Tapped += async (s, e) =>
         {
-            // C04 Hero Flight Overlay Approximation
-            var grad = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 1) };
-            grad.GradientStops.Add(new GradientStop(Color.Parse(item.Colors[0]), 0));
-            grad.GradientStops.Add(new GradientStop(Color.Parse(item.Colors[1]), 1));
-
-            var clone = new Border
-            {
-                StrokeShape = new RoundRectangle { CornerRadius = new CornerRadius(16) },
-                Background = grad,
-                WidthRequest = 56,
-                HeightRequest = 56,
-                StrokeThickness = 0,
-                HorizontalOptions = LayoutOptions.Start,
-                VerticalOptions = LayoutOptions.Start,
-                ZIndex = 999
-            };
-
-            var itemIndex = ItemsList.Children.IndexOf(grid);
-            var yPos = 56 + 16 + 180 + 16 + 56 + 16 + 200 + (itemIndex * 72) - MainScroll.ScrollY;
-            clone.TranslationX = 16;
-            clone.TranslationY = yPos;
-
-            RootGrid.Children.Add(clone);
-
-            var targetWidth = RootGrid.Width;
-            var anim = new Animation(v =>
-            {
-                clone.WidthRequest = 56 + (targetWidth - 56) * v;
-                clone.HeightRequest = 56 + (240 - 56) * v;
-                clone.TranslationX = 16 * (1 - v);
-                clone.TranslationY = yPos * (1 - v);
-            }, 0, 1, Easing.CubicInOut);
-
-            anim.Commit(this, "HeroFlight", 16, 400, null, async (v, c) =>
-            {
-                await Navigation.PushAsync(new DetailPage(item));
-                RootGrid.Children.Remove(clone);
-            });
+            await Navigation.PushAsync(new DetailPage(item));
         };
         grid.GestureRecognizers.Add(tap);
-        var pointer = new PointerGestureRecognizer();
-        pointer.PointerEntered += OnPointerEntered;
-        pointer.PointerExited += OnPointerExited;
-        grid.GestureRecognizers.Add(pointer);
 
         return grid;
     }
