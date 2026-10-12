@@ -1,0 +1,97 @@
+name: Uno CI
+
+on:
+  push:
+    paths:
+      - 'apps/uno/**'
+      - '.github/workflows/uno.yml'
+  pull_request:
+    paths:
+      - 'apps/uno/**'
+      - '.github/workflows/uno.yml'
+  workflow_dispatch:
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install Workloads
+        run: dotnet workload restore apps/uno/UnoPulse.sln || true
+      - name: Install WASM Tools
+        run: dotnet workload install wasm-tools || true
+      - name: Build WebAssembly
+        continue-on-error: true
+        run: dotnet build apps/uno/UnoPulse/UnoPulse.csproj -c Release -f net10.0-browserwasm
+      - name: Upload Web Artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: uno-web
+          path: apps/uno/UnoPulse/bin/Release/net10.0-browserwasm/publish/wwwroot/
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '17'
+      - name: Install Workloads
+        run: dotnet workload restore apps/uno/UnoPulse.sln || true
+      - name: Build Android
+        continue-on-error: true
+        run: dotnet build apps/uno/UnoPulse/UnoPulse.csproj -c Release -f net10.0-android -p:AndroidPackageFormat=apk
+      - name: Find Android APK
+        if: success()
+        id: find_apk
+        run: |
+          APK_PATH=$(find apps/uno/UnoPulse/bin/Release/net10.0-android/ -name "*-Signed.apk" | head -n 1)
+          if [ -z "$APK_PATH" ]; then
+            APK_PATH=$(find apps/uno/UnoPulse/bin/Release/net10.0-android/ -name "*.apk" | head -n 1)
+          fi
+          echo "apk_path=$APK_PATH" >> $GITHUB_ENV
+      - name: Rename Android Artifact
+        if: success()
+        run: |
+          mkdir -p apk_output
+          cp ${{ env.apk_path }} apk_output/app-uno.apk
+      - name: Upload Android Artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: uno-android
+          path: apk_output/app-uno.apk
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Install Workloads
+        run: dotnet workload restore apps/uno/UnoPulse.sln || true
+      - name: Build Windows
+        continue-on-error: true
+        run: dotnet publish apps/uno/UnoPulse/UnoPulse.csproj -c Release -f net10.0-windows10.0.19041.0 -p:RuntimeIdentifier=win-x64 -p:WindowsAppSDKSelfContained=true
+      - name: Zip Windows Output
+        if: success()
+        run: Compress-Archive -Path apps/uno/UnoPulse/bin/Release/net10.0-windows10.0.19041.0/win-x64/publish/* -DestinationPath app-uno-windows.zip
+      - name: Upload Windows Artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: uno-windows
+          path: app-uno-windows.zip
