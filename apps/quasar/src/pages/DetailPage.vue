@@ -6,7 +6,8 @@
         class="header-bg hero-thumbnail"
         :style="[
           `background: linear-gradient(135deg, ${item.colors[0]}, ${item.colors[1]})`,
-          { transform: `translateY(${scrollOffset * 0.5}px)` }
+          { transform: `translateY(${scrollOffset * 0.5}px)` },
+          { viewTransitionName: 'hero-thumbnail' }
         ]"
       ></div>
 
@@ -255,11 +256,43 @@ const startPos = ref({ x: 0, y: 0 })
 
 const dragStyle = computed(() => ({
   transform: `translate(${dragPos.value.x}px, ${dragPos.value.y}px)`,
-  transition: isDragging.value ? 'none' : 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)' // approximated spring
+  transition: 'none'
 }))
+
+let animationFrameId = null
+let velocityX = 0
+let velocityY = 0
+
+const animateSpring = () => {
+  const stiffness = 300
+  const damping = 20
+  const mass = 1
+
+  const springForceX = -stiffness * dragPos.value.x
+  const dampingForceX = -damping * velocityX
+  const accelerationX = (springForceX + dampingForceX) / mass
+  velocityX += accelerationX * 0.016 // 16ms approx for 60fps
+  dragPos.value.x += velocityX * 0.016
+
+  const springForceY = -stiffness * dragPos.value.y
+  const dampingForceY = -damping * velocityY
+  const accelerationY = (springForceY + dampingForceY) / mass
+  velocityY += accelerationY * 0.016
+  dragPos.value.y += velocityY * 0.016
+
+  if (Math.abs(dragPos.value.x) < 0.1 && Math.abs(velocityX) < 0.1 && Math.abs(dragPos.value.y) < 0.1 && Math.abs(velocityY) < 0.1) {
+    dragPos.value = { x: 0, y: 0 }
+    cancelAnimationFrame(animationFrameId)
+  } else {
+    animationFrameId = requestAnimationFrame(animateSpring)
+  }
+}
 
 const startDrag = (e) => {
   isDragging.value = true
+  if (animationFrameId) {
+    cancelAnimationFrame(animationFrameId)
+  }
   startPos.value = {
     x: e.clientX - dragPos.value.x,
     y: e.clientY - dragPos.value.y
@@ -283,7 +316,9 @@ const onDrag = (e) => {
 
 const endDrag = () => {
   isDragging.value = false
-  dragPos.value = { x: 0, y: 0 } // Spring back
+  velocityX = 0
+  velocityY = 0
+  animateSpring() // Spring back
   document.removeEventListener('pointermove', onDrag)
   document.removeEventListener('pointerup', endDrag)
 }

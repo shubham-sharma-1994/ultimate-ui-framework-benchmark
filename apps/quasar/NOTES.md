@@ -6,7 +6,7 @@ Version used: 2.16.4 (Vue 3.4.29) · Language: Javascript · Rendering model: DO
 |---|---|---|
 | Web | ✅ | Built using Vite. Fully supported. |
 | Android | ✅ | Built using Capacitor. |
-| Windows | ⏭️ | Skipped due to setup complexity of Electron mode via Capacitor, and the template initially scaffolding as an SPA. Marked continue-on-error in CI. |
+| Windows | ✅ | Wrapped existing Vite web build in a standalone Electron shell to preserve web targets seamlessly. |
 
 ## Capabilities (see spec/DESIGN.md §9)
 | ID | Status | Notes / how approximated / why skipped |
@@ -14,10 +14,10 @@ Version used: 2.16.4 (Vue 3.4.29) · Language: Javascript · Rendering model: DO
 | C01 | ✅ | CSS Custom animated orbit works flawlessly. |
 | C02 | ✅ | Vue `<transition>` and CSS transitions handle implicit animations effectively. |
 | C03 | ✅ | Implemented via `animation-delay` staggered CSS fade up. |
-| C04 | ⏭️ | Skipped. True hero/shared element transitions are not natively supported in Vue Router out of the box without complex third party packages, violating "no deep hacks". |
+| C04 | ✅ | Implemented using the View Transitions API (`document.startViewTransition`) since Vue Router lacks native shared element support. |
 | C05 | ✅ | Implemented `slide-fade` Vue router transition based on routing direction meta properties. |
 | C06 | ✅ | Standard Vue transition over relative element `slide-up`. |
-| C07 | ⚠️ | Approximated spring physics via custom cubic-bezier transition curves since JS Physics was overcomplicating the setup. |
+| C07 | ✅ | Real JS spring logic using requestAnimationFrame for the drag card release. |
 | C08 | ✅ | Used custom pointer events for drag and long-press; Quasar's native `q-slide-item` for swipe-to-dismiss. |
 | C09 | ✅ | Vue `onScroll` binding with reactive calculations handles parallax naturally. |
 | C10 | ✅ | Standard reactive SVG stroke-dashoffset drawing via Vue state. |
