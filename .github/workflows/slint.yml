@@ -108,9 +108,15 @@ jobs:
       - name: Collect APK
         run: |
           mkdir -p out
-          APK=$(find apps/slint/target -name '*.apk' | head -1)
+          find apps/slint/target -name '*.apk' -ls
+          APK=apps/slint/target/release/apk/pulse-slint.apk
+          test -f "$APK" || APK=$(find apps/slint/target -name '*.apk' | head -1)
           test -n "$APK" || { echo "no APK produced"; exit 1; }
-          cp "$APK" out/app-slint.apk
+          cp "$APK" out/unsigned-or-signed.apk
+      - name: Sign APK (explicit, verified)
+        run: |
+          bash scripts/sign-apk.sh out/unsigned-or-signed.apk out/app-slint.apk
+          rm out/unsigned-or-signed.apk
       - name: Inspect APK (diagnostics)
         continue-on-error: true
         run: |

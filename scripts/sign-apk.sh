@@ -10,6 +10,6 @@ KS="${RUNNER_TEMP:-/tmp}/pulse-debug.keystore"
   -alias pulse -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=Pulse Benchmark,O=Pulse,C=US"
 mkdir -p "$(dirname "$OUT")"
 "$BT/zipalign" -p -f 4 "$IN" "$OUT.aligned"
-"$BT/apksigner" sign --ks "$KS" --ks-pass pass:android --key-pass pass:android --ks-key-alias pulse --out "$OUT" "$OUT.aligned"
+"$BT/apksigner" sign --v1-signing-enabled true --v2-signing-enabled true --ks "$KS" --ks-pass pass:android --key-pass pass:android --ks-key-alias pulse --out "$OUT" "$OUT.aligned"
 rm -f "$OUT.aligned" "$OUT.idsig"
-"$BT/apksigner" verify --verbose "$OUT" | head -5
+"$BT/apksigner" verify --verbose --print-certs "$OUT"
