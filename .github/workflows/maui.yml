@@ -1,0 +1,62 @@
+name: MAUI Build
+
+on:
+  push:
+    paths:
+      - 'apps/maui/**'
+      - '.github/workflows/maui.yml'
+  pull_request:
+    paths:
+      - 'apps/maui/**'
+      - '.github/workflows/maui.yml'
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install MAUI Workload
+        run: dotnet workload install maui
+
+      - name: Build Android
+        run: dotnet build apps/maui/Pulse.csproj -c Release -f net8.0-android -p:AndroidPackageFormat=apk
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: maui-android
+          path: apps/maui/bin/Release/net8.0-android/*Signed.apk
+          retention-days: 30
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install MAUI Workload
+        run: dotnet workload install maui
+
+      - name: Build Windows
+        run: dotnet build apps/maui/Pulse.csproj -c Release -f net8.0-windows10.0.19041.0
+
+      - name: Compress Windows Build
+        run: Compress-Archive -Path apps/maui/bin/Release/net8.0-windows10.0.19041.0/win10-x64/AppPackages/* -DestinationPath app-maui-windows.zip
+
+      - name: Upload Windows zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: maui-windows
+          path: app-maui-windows.zip
+          retention-days: 30

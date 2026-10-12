@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Pulse"
+             x:Class="Pulse.DetailPage"
+             BackgroundColor="{StaticResource BackgroundColor}">
+
+    <ContentPage.Resources>
+        <local:ProgressRingDrawable x:Key="ProgressRingDrawable" />
+        <Style TargetType="Grid" x:Key="SwipeCardStyle">
+            <Setter Property="BackgroundColor" Value="#E5484D" />
+            <!-- Simplified swipe to dismiss visuals -->
+        </Style>
+    </ContentPage.Resources>
+
+    <Grid x:Name="RootGrid">
+        <ScrollView x:Name="MainScroll" Scrolled="OnMainScroll">
+            <VerticalStackLayout Spacing="0" Padding="0,0,0,32">
+                <!-- Header (Parallax placeholder) -->
+                <Grid x:Name="HeaderArea" HeightRequest="240" BackgroundColor="{StaticResource SurfaceColor}">
+                    <Border x:Name="HeroThumb" StrokeShape="RoundRectangle 0" StrokeThickness="0" HorizontalOptions="Fill" VerticalOptions="Fill" />
+                    <!-- Back button top left -->
+                    <ImageButton x:Name="BackButton" AutomationId="back" Source="back.svg" WidthRequest="44" HeightRequest="44" HorizontalOptions="Start" VerticalOptions="Start" Margin="16" Clicked="OnBackClicked" />
+                </Grid>
+
+                <VerticalStackLayout Padding="16" Spacing="24">
+                    <!-- Progress Ring -->
+                    <Grid HorizontalOptions="Center" WidthRequest="120" HeightRequest="120">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnRingTapped" />
+                        </Grid.GestureRecognizers>
+                        <GraphicsView x:Name="RingView" AutomationId="ring" Drawable="{StaticResource ProgressRingDrawable}" />
+                        <Label x:Name="RingLabel" Text="0%" Style="{StaticResource Title}" TextColor="{StaticResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center" />
+                    </Grid>
+
+                    <!-- Accordion -->
+                    <Border StrokeShape="RoundRectangle 20" BackgroundColor="{StaticResource SurfaceColor}" StrokeThickness="1" Stroke="{StaticResource OutlineColor}">
+                        <VerticalStackLayout AutomationId="accordion">
+                            <Grid Padding="16" ColumnDefinitions="*, Auto">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAccordionTapped" />
+                                </Grid.GestureRecognizers>
+                                <Label Text="Details" Style="{StaticResource Title}" TextColor="{StaticResource TextColor}" VerticalOptions="Center" />
+                                <Label x:Name="AccordionChevron" Text="v" Style="{StaticResource Title}" TextColor="{StaticResource TextColor}" Grid.Column="1" VerticalOptions="Center" />
+                            </Grid>
+                            <ContentView x:Name="AccordionContent" IsVisible="False" HeightRequest="0" Opacity="0">
+                                <Label Text="Here is some extra content that expands." Style="{StaticResource Body}" TextColor="{StaticResource TextMutedColor}" Padding="16,0,16,16" />
+                            </ContentView>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Draggable card -->
+                    <ContentView WidthRequest="240" HeightRequest="240" HorizontalOptions="Center" BackgroundColor="Transparent">
+                        <Border x:Name="DragCard" AutomationId="drag-card" StrokeShape="RoundRectangle 20" BackgroundColor="{StaticResource SurfaceColor}" WidthRequest="96" HeightRequest="96" HorizontalOptions="Center" VerticalOptions="Center">
+                            <Border.Shadow>
+                                <Shadow Brush="Black" Opacity="0.16" Offset="0,8" Radius="24" />
+                            </Border.Shadow>
+                            <Label Text="Drag me" Style="{StaticResource LabelStyle}" TextColor="{StaticResource TextColor}" HorizontalOptions="Center" VerticalOptions="Center" />
+                            <Border.GestureRecognizers>
+                                <PanGestureRecognizer PanUpdated="OnDragCardPanUpdated" />
+                            </Border.GestureRecognizers>
+                        </Border>
+                    </ContentView>
+
+                    <!-- Swipe to dismiss list -->
+                    <VerticalStackLayout Spacing="8">
+                        <SwipeView x:Name="Swipe1" AutomationId="swipe-1" SwipeEnded="OnSwipeEnded">
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItem Text="Delete" BackgroundColor="#E5484D" />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Border StrokeShape="RoundRectangle 12" BackgroundColor="{StaticResource SurfaceColor}" Padding="16">
+                                <Label Text="Swipe me 1" Style="{StaticResource Body}" TextColor="{StaticResource TextColor}" />
+                            </Border>
+                        </SwipeView>
+                        <!-- Repeats omitted for brevity, adding a Reset button -->
+                        <Button x:Name="SwipeReset" AutomationId="swipe-reset" Text="Reset" Clicked="OnSwipeResetClicked" BackgroundColor="Transparent" TextColor="{StaticResource PrimaryColor}" HorizontalOptions="Start" />
+                    </VerticalStackLayout>
+
+                    <!-- Buttons Row -->
+                    <HorizontalStackLayout Spacing="8">
+                        <Button AutomationId="btn-dialog" Text="Show dialog" Clicked="OnBtnDialogClicked" />
+                        <Button AutomationId="btn-sheet" Text="Show sheet" Clicked="OnBtnSheetClicked" />
+                        <Button AutomationId="btn-toast" Text="Toast" Clicked="OnBtnToastClicked" />
+                    </HorizontalStackLayout>
+
+                    <!-- Shimmer / Body -->
+                    <Grid>
+                        <VerticalStackLayout x:Name="ShimmerBlock" AutomationId="shimmer" Spacing="8">
+                            <BoxView Color="{StaticResource OutlineColor}" HeightRequest="24" CornerRadius="4" WidthRequest="300" HorizontalOptions="Start" />
+                            <BoxView Color="{StaticResource OutlineColor}" HeightRequest="24" CornerRadius="4" WidthRequest="250" HorizontalOptions="Start" />
+                            <BoxView Color="{StaticResource OutlineColor}" HeightRequest="24" CornerRadius="4" WidthRequest="200" HorizontalOptions="Start" />
+                        </VerticalStackLayout>
+                        <Label x:Name="BodyText" Style="{StaticResource Body}" TextColor="{StaticResource TextColor}" Opacity="0" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <!-- App bar for parallax title -->
+        <Grid x:Name="FakeAppBar" HeightRequest="56" BackgroundColor="{StaticResource SurfaceColor}" VerticalOptions="Start" Padding="60,0,16,0" Opacity="0">
+            <Grid.Shadow>
+                <Shadow Brush="Black" Opacity="0.08" Offset="0,2" Radius="8" />
+            </Grid.Shadow>
+            <Label x:Name="AppBarTitle" Text="Title" Style="{StaticResource Title}" TextColor="{StaticResource TextColor}" VerticalOptions="Center" />
+        </Grid>
+
+        <!-- Modals -->
+        <ContentView x:Name="DialogOverlay" BackgroundColor="#66000000" IsVisible="False" InputTransparent="False">
+            <Border x:Name="DialogCard" StrokeShape="RoundRectangle 20" BackgroundColor="{StaticResource SurfaceColor}" WidthRequest="300" HorizontalOptions="Center" VerticalOptions="Center" Padding="24">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Dialog" Style="{StaticResource Title}" TextColor="{StaticResource TextColor}" />
+                    <Label Text="This is a modal dialog." Style="{StaticResource Body}" TextColor="{StaticResource TextColor}" />
+                    <Button Text="Close" Clicked="OnCloseDialogClicked" HorizontalOptions="End" />
+                </VerticalStackLayout>
+            </Border>
+        </ContentView>
+    </Grid>
+</ContentPage>

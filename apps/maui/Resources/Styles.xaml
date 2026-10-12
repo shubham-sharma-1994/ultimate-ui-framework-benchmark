@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextColor}" />
+        <Setter Property="FontFamily" Value="InterRegular" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Display">
+        <Setter Property="FontSize" Value="32" />
+        <Setter Property="LineHeight" Value="1.25" />
+        <Setter Property="FontFamily" Value="InterBold" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Title">
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="LineHeight" Value="1.27" />
+        <Setter Property="FontFamily" Value="InterSemiBold" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Body">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="LineHeight" Value="1.5" />
+        <Setter Property="FontFamily" Value="InterRegular" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="LabelStyle">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="LineHeight" Value="1.23" />
+        <Setter Property="FontFamily" Value="InterMedium" />
+    </Style>
+
+    <Style TargetType="Label" x:Key="Caption">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="LineHeight" Value="1.33" />
+        <Setter Property="FontFamily" Value="InterRegular" />
+    </Style>
+
+    <Style TargetType="Page" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+    </Style>
+
+    <Style TargetType="Button">
+        <Setter Property="FontFamily" Value="InterMedium" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="CornerRadius" Value="14" />
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+        <Setter Property="TextColor" Value="{StaticResource OnPrimaryColor}" />
+    </Style>
+
+    <Style TargetType="Switch">
+        <Setter Property="OnColor" Value="{StaticResource PrimaryColor}" />
+    </Style>
+
+    <Style TargetType="Slider">
+        <Setter Property="MinimumTrackColor" Value="{StaticResource PrimaryColor}" />
+        <Setter Property="MaximumTrackColor" Value="{StaticResource OutlineColor}" />
+        <Setter Property="ThumbColor" Value="{StaticResource PrimaryColor}" />
+    </Style>
+
+</ResourceDictionary>
