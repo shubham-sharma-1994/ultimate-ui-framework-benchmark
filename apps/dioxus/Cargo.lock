@@ -735,6 +735,7 @@ dependencies = [
  "dioxus-history",
  "dioxus-hooks",
  "dioxus-html",
+ "dioxus-mobile",
  "dioxus-router",
  "dioxus-signals",
  "dioxus-web",
@@ -910,6 +911,7 @@ dependencies = [
  "dioxus-devtools",
  "dioxus-history",
  "dioxus-lib",
+ "dioxus-mobile",
  "dioxus-web",
  "dioxus_server_macro",
  "futures-channel",
@@ -1038,6 +1040,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "dioxus-mobile"
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6d1295388909f427758993f32a571e0f8698d6ce0f125fa0e81b8bfdec3fa952"
+dependencies = [
+ "dioxus-cli-config",
+ "dioxus-desktop",
+ "dioxus-lib",
+ "jni",
+ "libc",
+ "once_cell",
+]
+
+[[package]]
 name = "dioxus-router"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1132,10 +1148,12 @@ version = "0.1.0"
 dependencies = [
  "dioxus",
  "dioxus-logger",
+ "dioxus-router",
  "gloo-timers",
  "log",
  "serde",
  "serde_json",
+ "tokio",
  "web-sys",
 ]
 

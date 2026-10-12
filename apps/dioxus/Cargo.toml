@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 dioxus-logger = "0.6.2"
-gloo-timers = { version = "0.4.0", features = ["futures"] }
+dioxus-router = "0.6.3"
 log = "0.4.34"
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
@@ -14,12 +14,35 @@ serde_json = "1.0.154"
 version = "0.3.106"
 features = ["Window", "Location", "HtmlDocument", "Element", "Node"]
 
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+gloo-timers = { version = "0.4.0", features = ["futures"] }
+
 [target.'cfg(target_arch = "wasm32")'.dependencies.dioxus]
 version = "0.6.3"
 default-features = false
 features = ["web", "router", "macro", "hooks", "signals", "html", "document", "launch"]
 
-[target.'cfg(not(target_arch = "wasm32"))'.dependencies.dioxus]
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+tokio = { version = "1.0", features = ["time", "rt"] }
+
+[target.'cfg(all(not(target_arch = "wasm32"), not(target_os = "android")))'.dependencies.dioxus]
 version = "0.6.3"
 default-features = false
 features = ["desktop", "router", "macro", "hooks", "signals", "html", "document", "launch"]
+
+[target.'cfg(target_os = "android")'.dependencies.dioxus]
+version = "0.6.3"
+default-features = false
+features = ["mobile", "router", "macro", "hooks", "signals", "html", "document", "launch"]
+
+[profile]
+
+[profile.wasm-dev]
+inherits = "dev"
+opt-level = 1
+
+[profile.server-dev]
+inherits = "dev"
+
+[profile.android-dev]
+inherits = "dev"
