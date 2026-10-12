@@ -401,6 +401,9 @@ Page {
                             anchors.fill: parent
                             onClicked: {
                                 // QML StackView push
+                                if (typeof historyManager !== "undefined" && !mainWindow.isPoppingFromBrowser) { historyManager.pushState(); }
+                                var globalCoords = thumb.mapToItem(rootContainer, 0, 0);
+                                mainWindow.startHeroAnimation(globalCoords.x, globalCoords.y, thumb.width, thumb.height, modelData.colors[0], modelData.colors[1]);
                                 stackView.push("Page2.qml", { "itemData": modelData })
                             }
                         }
