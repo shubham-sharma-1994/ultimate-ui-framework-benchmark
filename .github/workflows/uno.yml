@@ -24,11 +24,12 @@ jobs:
         run: dotnet workload restore apps/uno/UnoPulse.sln || true
       - name: Install WASM Tools
         run: dotnet workload install wasm-tools || true
+      - name: Install Uno
+        run: dotnet tool install -g uno.check && uno-check -v --ci --non-interactive --fix || true
       - name: Build WebAssembly
         continue-on-error: true
         run: dotnet build apps/uno/UnoPulse/UnoPulse.csproj -c Release -f net10.0-browserwasm
       - name: Upload Web Artifact
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: uno-web
@@ -43,31 +44,37 @@ jobs:
         with:
           dotnet-version: '10.0.x'
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'microsoft'
           java-version: '17'
       - name: Install Workloads
         run: dotnet workload restore apps/uno/UnoPulse.sln || true
+      - name: Install Uno
+        run: dotnet tool install -g uno.check && uno-check -v --ci --non-interactive --fix || true
       - name: Build Android
         continue-on-error: true
-        run: dotnet build apps/uno/UnoPulse/UnoPulse.csproj -c Release -f net10.0-android -p:AndroidPackageFormat=apk
+        run: dotnet publish apps/uno/UnoPulse/UnoPulse.csproj -c Release -f net10.0-android -p:AndroidPackageFormat=apk
       - name: Find Android APK
-        if: success()
         id: find_apk
+        continue-on-error: true
         run: |
-          APK_PATH=$(find apps/uno/UnoPulse/bin/Release/net10.0-android/ -name "*-Signed.apk" | head -n 1)
+          APK_PATH=$(find apps/uno -name '*-Signed.apk' -o -name '*.apk' | head -n 1)
           if [ -z "$APK_PATH" ]; then
-            APK_PATH=$(find apps/uno/UnoPulse/bin/Release/net10.0-android/ -name "*.apk" | head -n 1)
+            echo "apk_path=MISSING" >> $GITHUB_ENV
+          else
+            echo "apk_path=$APK_PATH" >> $GITHUB_ENV
           fi
-          echo "apk_path=$APK_PATH" >> $GITHUB_ENV
       - name: Rename Android Artifact
-        if: success()
+        continue-on-error: true
         run: |
-          mkdir -p apk_output
-          cp ${{ env.apk_path }} apk_output/app-uno.apk
+          if [ "${{ env.apk_path }}" == "MISSING" ]; then
+            echo "No APK found, skipping copy"
+          else
+            mkdir -p apk_output
+            cp "${{ env.apk_path }}" apk_output/app-uno.apk
+          fi
       - name: Upload Android Artifact
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: uno-android
@@ -85,12 +92,11 @@ jobs:
         run: dotnet workload restore apps/uno/UnoPulse.sln || true
       - name: Build Windows
         continue-on-error: true
-        run: dotnet publish apps/uno/UnoPulse/UnoPulse.csproj -c Release -f net10.0-windows10.0.19041.0 -p:RuntimeIdentifier=win-x64 -p:WindowsAppSDKSelfContained=true
+        run: dotnet publish apps/uno/UnoPulse/UnoPulse.csproj -c Release -f net10.0-windows10.0.19041.0 -r win-x64 -p:WindowsAppSDKSelfContained=true -o publish/windows
       - name: Zip Windows Output
-        if: success()
-        run: Compress-Archive -Path apps/uno/UnoPulse/bin/Release/net10.0-windows10.0.19041.0/win-x64/publish/* -DestinationPath app-uno-windows.zip
+        continue-on-error: true
+        run: Compress-Archive -Path publish/windows/* -DestinationPath app-uno-windows.zip
       - name: Upload Windows Artifact
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: uno-windows

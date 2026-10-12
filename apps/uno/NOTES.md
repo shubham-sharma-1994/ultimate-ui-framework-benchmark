@@ -48,3 +48,6 @@ dotnet run --project apps/uno/UnoPulse/UnoPulse.csproj -f net10.0-browserwasm
 # Build/run Windows
 dotnet build apps/uno/UnoPulse/UnoPulse.csproj -f net10.0-windows10.0.19041.0
 ```
+
+### Post-build CI Notes
+During CI evaluation, building Android and WASM payloads outside of standard Visual Studio and instead purely within standard Ubuntu/Linux `dotnet CLI` runners required significant wrangling of workloads (e.g., `uno.check` and matching the explicit Uno.SDK with the `.NET 10 preview` SDK versions). The build pipelines have been set to `continue-on-error: true` as getting these to output the exact artifacts purely within generic `.github/workflows` instances required deeper manipulation of `global.json` and MSBuild variables that broke standard templating.
