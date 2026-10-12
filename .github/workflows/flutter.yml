@@ -23,7 +23,7 @@ jobs:
       - working-directory: apps/flutter
         run: flutter pub get
       - working-directory: apps/flutter
-        run: flutter build web --web-renderer canvaskit
+        run: flutter build web
       - uses: actions/upload-artifact@v4
         with:
           name: flutter-web
@@ -66,8 +66,8 @@ jobs:
         run: flutter pub get
       - working-directory: apps/flutter
         run: flutter build windows
-      - working-directory: apps/flutter/build/windows/runner/Release
-        run: Compress-Archive -Path * -DestinationPath ../../../../../app-flutter-windows.zip
+      - working-directory: apps/flutter/build/windows/x64/runner/Release
+        run: Compress-Archive -Path * -DestinationPath ../../../../../../app-flutter-windows.zip
       - uses: actions/upload-artifact@v4
         with:
           name: flutter-windows
