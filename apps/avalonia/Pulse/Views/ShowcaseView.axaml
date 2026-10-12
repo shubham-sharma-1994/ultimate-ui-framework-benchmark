@@ -49,7 +49,18 @@
                 <!-- Counter Row -->
                 <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
                     <TextBlock Grid.Column="0" Text="Taps" FontSize="13" FontWeight="Medium" Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" Text="{Binding TapsCount}" FontSize="32" FontWeight="Bold" Foreground="{DynamicResource TextBrush}" Margin="16,0" VerticalAlignment="Center"/>
+
+                    <TransitioningContentControl Grid.Column="1" Content="{Binding TapsCount}" Margin="16,0" VerticalAlignment="Center">
+                        <TransitioningContentControl.PageTransition>
+                            <PageSlide Duration="0:0:0.25" Orientation="Vertical" />
+                        </TransitioningContentControl.PageTransition>
+                        <TransitioningContentControl.ContentTemplate>
+                            <DataTemplate x:DataType="x:Int32">
+                                <TextBlock Text="{Binding}" FontSize="32" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"/>
+                            </DataTemplate>
+                        </TransitioningContentControl.ContentTemplate>
+                    </TransitioningContentControl>
+
                     <Button Grid.Column="2" Width="56" Height="56" CornerRadius="14" AutomationProperties.AutomationId="counter-inc"
                             Command="{Binding IncrementTapsCommand}" Background="{DynamicResource PrimaryBrush}">
                         <!-- Long press approximation -->
@@ -101,7 +112,7 @@
                 <ItemsControl ItemsSource="{Binding Items}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Command="{Binding $parent[UserControl].((vm:ShowcaseViewModel)DataContext).GoToDetailCommand}" CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" Padding="0" Margin="0,0,0,16" HorizontalAlignment="Stretch">
+                            <Button AttachedToVisualTree="OnItemAttachedToVisualTree" Command="{Binding $parent[UserControl].((vm:ShowcaseViewModel)DataContext).GoToDetailCommand}" CommandParameter="{Binding}" Background="Transparent" BorderThickness="0" Padding="0" Margin="0,0,0,16" HorizontalAlignment="Stretch">
                                 <Grid ColumnDefinitions="56, *, Auto" Background="Transparent" AutomationProperties.AutomationId="{Binding Id, StringFormat='item-\{0\}'}">
                                     <Border Grid.Column="0" Width="56" Height="56" CornerRadius="16">
                                         <Border.Background>

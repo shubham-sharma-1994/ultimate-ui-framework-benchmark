@@ -16,29 +16,13 @@
 
     <!-- Overlay container for Toast/Dialog/Sheet approximations -->
     <Grid>
-        <Grid RowDefinitions="Auto,*">
-            <!-- Header (parallax approximation could be done by binding translation to scroll offset, skipping for simplicity and doing fixed header here) -->
-            <Border Grid.Row="0" Height="240" AutomationProperties.AutomationId="detail-header">
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
-                        <GradientStop Offset="0" Color="{Binding Item.Colors[0], Converter={StaticResource HexToColorConverter}}"/>
-                        <GradientStop Offset="1" Color="{Binding Item.Colors[1], Converter={StaticResource HexToColorConverter}}"/>
-                    </LinearGradientBrush>
-                </Border.Background>
-                <Grid>
-                    <Button AutomationProperties.AutomationId="back" Command="{Binding GoBackCommand}"
-                            HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16"
-                            Background="Transparent" BorderThickness="0">
-                        <TextBlock Text="&lt; Back" Foreground="White" FontSize="16"/>
-                    </Button>
-                    <TextBlock Text="{Binding Item.Title}" FontSize="32" FontWeight="Bold" Foreground="White"
-                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Grid>
-            </Border>
-
+        <Grid>
             <!-- Scrollable Content -->
-            <ScrollViewer Grid.Row="1" Padding="16">
-                <StackPanel Spacing="16">
+            <ScrollViewer ScrollChanged="OnScrollChanged" ZIndex="1" x:Name="MainScroll">
+                <StackPanel>
+                    <Panel Height="240"/>
+                    <Border Background="{DynamicResource BackgroundBrush}" Padding="16">
+                        <StackPanel Spacing="16">
 
                     <!-- Progress Ring -->
                     <Grid Width="120" Height="120" HorizontalAlignment="Center" PointerPressed="OnRingTapped" AutomationProperties.AutomationId="ring">
@@ -66,9 +50,16 @@
                         </Panel>
                     </Expander>
 
-                    <!-- Draggable Card (approximated with simple static card due to complexity of pointer capture + spring physics) -->
-                    <Border Background="{DynamicResource SurfaceAltBrush}" CornerRadius="20" Height="96" AutomationProperties.AutomationId="drag-card">
-                        <TextBlock Text="Draggable (Approximated)" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource TextBrush}"/>
+                    <!-- Draggable Card -->
+                    <Border CornerRadius="20" Height="96"
+                            AutomationProperties.AutomationId="drag-card" x:Name="DragCard"
+                            PointerPressed="OnDragCardPointerPressed"
+                            PointerMoved="OnDragCardPointerMoved"
+                            PointerReleased="OnDragCardPointerReleased"
+                            Background="Transparent">
+                        <Border Background="{DynamicResource SurfaceAltBrush}" CornerRadius="20">
+                            <TextBlock Text="Drag Me" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource TextBrush}"/>
+                        </Border>
                     </Border>
 
                     <!-- Swipe to dismiss (approximated with normal items + delete button) -->
@@ -99,8 +90,29 @@
                     </Grid>
 
                     <Panel Height="32"/>
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
             </ScrollViewer>
+
+            <!-- Header with Parallax -->
+            <Border Height="240" AutomationProperties.AutomationId="detail-header" VerticalAlignment="Top" ZIndex="0" x:Name="HeaderBorder">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                        <GradientStop Offset="0" Color="{Binding Item.Colors[0], Converter={StaticResource HexToColorConverter}}"/>
+                        <GradientStop Offset="1" Color="{Binding Item.Colors[1], Converter={StaticResource HexToColorConverter}}"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <Button AutomationProperties.AutomationId="back" Command="{Binding GoBackCommand}"
+                            HorizontalAlignment="Left" VerticalAlignment="Top" Margin="16"
+                            Background="Transparent" BorderThickness="0">
+                        <TextBlock Text="&lt; Back" Foreground="White" FontSize="16"/>
+                    </Button>
+                    <TextBlock Text="{Binding Item.Title}" FontSize="32" FontWeight="Bold" Foreground="White"
+                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
         </Grid>
 
         <!-- Overlays -->

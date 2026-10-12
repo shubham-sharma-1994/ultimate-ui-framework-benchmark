@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Pulse.Browser/Pulse.Browser.csproj" />
   <Project Path="Pulse.Desktop/Pulse.Desktop.csproj" />
+  <Project Path="Pulse.Android/Pulse.Android.csproj" />
   <Project Path="Pulse/Pulse.csproj" />
 </Solution>
