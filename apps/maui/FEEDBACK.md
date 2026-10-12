@@ -28,3 +28,4 @@ Many modern mobile patterns require third-party libraries in the MAUI ecosystem 
 - Highly imperative UI manipulation for anything dynamic.
 - Missing crucial modern UI components (Bottom Sheets, Toasts).
 - CLI tooling and workload management on non-Windows machines is extremely brittle.
+- MAUI Windows packaging in CI is fragile, requiring specific properties (`WindowsPackageType=None`, `SelfContained=false`) to avoid workload restore errors regarding target runtimes.

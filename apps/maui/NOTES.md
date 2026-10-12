@@ -38,7 +38,7 @@ Version used: .NET 8.0 · Language: C# / XAML · Rendering model: Native Widgets
 - None.
 
 ## How to run / build
-**Note:** Compiling in a pure Linux CLI environment may fail due to workload incompatibilities. Use Visual Studio 2022 on Windows or a clean CI pipeline.
+**Note:** Compiling in a pure Linux CLI environment may fail due to workload incompatibilities. Use Visual Studio 2022 on Windows or a clean CI pipeline. MAUI Windows packaging in CI is also known to be fragile.
 
 - `dotnet build -c Release -f net9.0-android`
 - `dotnet build -c Release -f net9.0-windows10.0.19041.0`
