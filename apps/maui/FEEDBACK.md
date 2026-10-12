@@ -29,3 +29,10 @@ Many modern mobile patterns require third-party libraries in the MAUI ecosystem 
 - Missing crucial modern UI components (Bottom Sheets, Toasts).
 - CLI tooling and workload management on non-Windows machines is extremely brittle.
 - MAUI Windows packaging in CI is fragile, requiring specific properties (`WindowsPackageType=None`, `SelfContained=false`) to avoid workload restore errors regarding target runtimes.
+
+
+## Round 2
+During Round 2, I implemented hover states, an approximated Hero transition, and real spring physics simulation.
+- **Hover**: Using `PointerGestureRecognizer` works well and allows triggering animations similar to tap.
+- **Hero Flight Overlay**: Since MAUI lacks a true shared-element transition, I had to create a fake clone, place it in an absolute overlay root grid, and animate it before pushing navigation. It's heavily approximated but possible without third-party tools.
+- **Physics**: Real tick-based physics works surprisingly well using `new Animation(...)` running at 60fps with step parameters rather than just applying a static `Easing.SpringOut`.
