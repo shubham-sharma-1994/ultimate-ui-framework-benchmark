@@ -32,4 +32,4 @@ PR title: "[{k}] Pulse app"."""
         d=json.loads(r.stdout); out[k]=d.get("id") or d
     except Exception: out[k]=r.stdout[:300]
     print(k,out[k],flush=True)
-json.dump(out,open("sessions.json","w"))
+a=json.load(open("sessions.json")); a.update(out); json.dump(a,open("sessions.json","w"),indent=1)

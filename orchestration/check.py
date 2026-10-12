@@ -2,7 +2,7 @@ import json,subprocess,sys
 S=json.load(open(sys.argv[1] if len(sys.argv)>1 else "sessions.json"))
 def get(p):
     return json.loads(subprocess.run(["curl","-sS","https://jules.googleapis.com/v1alpha/"+p],capture_output=True,text=True).stdout or "{}")
-for k,i in S.items():
+for k,i in [x for x in S.items() if not x[0].endswith("_old")]:
     s=get(f"sessions/{i}")
     prs=[o.get("pullRequest",{}).get("url") for o in s.get("outputs",[]) if o.get("pullRequest")]
     acts=get(f"sessions/{i}/activities?pageSize=100").get("activities",[])
