@@ -73,5 +73,48 @@ jobs:
     continue-on-error: true
     steps:
       - uses: actions/checkout@v4
-      - name: Skip Android
-        run: echo "Skipped android build due to headless environment complexity."
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/bin/cargo-apk
+            apps/slint/target
+          key: slint-android-${{ hashFiles('apps/slint/Cargo.lock') }}
+      - name: Install cargo-apk
+        run: command -v cargo-apk || cargo install cargo-apk --locked
+      - name: Create debug keystore (used to sign the release APK)
+        run: |
+          mkdir -p "$HOME/.android"
+          test -f "$HOME/.android/debug.keystore" || keytool -genkey -v -keystore "$HOME/.android/debug.keystore" \
+            -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 \
+            -validity 10000 -dname "CN=Android Debug,O=Android,C=US"
+      - name: Build APK
+        working-directory: apps/slint
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
+          ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+        run: |
+          export ANDROID_NDK_ROOT="$ANDROID_NDK_LATEST_HOME"
+          export ANDROID_NDK_HOME="$ANDROID_NDK_LATEST_HOME"
+          cargo apk build --release --lib --target aarch64-linux-android
+      - name: Collect APK
+        run: |
+          mkdir -p out
+          APK=$(find apps/slint/target -name '*.apk' | head -1)
+          test -n "$APK" || { echo "no APK produced"; exit 1; }
+          cp "$APK" out/app-slint.apk
+      - name: Upload Android Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pulse-slint-android
+          path: out/app-slint.apk
+          retention-days: 30

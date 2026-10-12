@@ -22,3 +22,4 @@ apps/ionic/node_modules
 apps/ionic/dist
 apps/ionic/android/.gradle
 apps/ionic/android/app/build
+target/

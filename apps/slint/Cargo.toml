@@ -3,6 +3,13 @@ name = "pulse-slint"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "pulse-slint"
+path = "src/main.rs"
+
 [dependencies]
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
@@ -10,3 +17,23 @@ slint = { version = "1.8.0", features = ["serde"] }
 
 [build-dependencies]
 slint-build = "1.8.0"
+
+# Android: Slint's android-activity backend (entry point is `android_main` in src/lib.rs)
+[target.'cfg(target_os = "android")'.dependencies]
+slint = { version = "1.8.0", features = ["serde", "backend-android-activity-06"] }
+
+[package.metadata.android]
+package = "com.example.pulse_slint"
+build_targets = ["aarch64-linux-android"]
+apk_name = "pulse-slint"
+
+[package.metadata.android.sdk]
+min_sdk_version = 24
+target_sdk_version = 34
+
+[package.metadata.android.application]
+label = "Pulse"
+
+[package.metadata.android.signing.release]
+path = "$HOME/.android/debug.keystore"
+keystore_password = "android"
