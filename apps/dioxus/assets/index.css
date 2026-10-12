@@ -1,0 +1,462 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --background: #F6F4FB;
+  --surface: #FFFFFF;
+  --surfaceAlt: #EEEAF7;
+  --primary: #6750A4;
+  --onPrimary: #FFFFFF;
+  --accent: #FF7A59;
+  --text: #1D1B20;
+  --textMuted: #6B6674;
+  --outline: #D9D3E6;
+  --success: #2E9E6B;
+}
+
+[data-theme="dark"] {
+  --background: #121016;
+  --surface: #1C1A22;
+  --surfaceAlt: #26232E;
+  --primary: #CFBCFF;
+  --onPrimary: #381E72;
+  --accent: #FF9E85;
+  --text: #E6E0E9;
+  --textMuted: #A9A3B3;
+  --outline: #3A3644;
+  --success: #5FD39B;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  overflow-x: hidden;
+  transition: background-color 500ms cubic-bezier(0.05, 0.7, 0.1, 1),
+              color 500ms cubic-bezier(0.05, 0.7, 0.1, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+#main-container {
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--background);
+  box-shadow: 0 0 24px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.e1 { box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+.e2 { box-shadow: 0 8px 24px rgba(0,0,0,.16); }
+
+/* Typography */
+.display { font-size: 32px; line-height: 40px; font-weight: 700; }
+.title { font-size: 22px; line-height: 28px; font-weight: 600; }
+.body { font-size: 16px; line-height: 24px; font-weight: 400; }
+.label { font-size: 13px; line-height: 16px; font-weight: 500; }
+.caption { font-size: 12px; line-height: 16px; font-weight: 400; }
+
+/* App Bar */
+.app-bar {
+  height: 56px;
+  background-color: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  transition: box-shadow 150ms cubic-bezier(0.2, 0, 0, 1), background-color 500ms cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.app-bar.scrolled {
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  color: var(--text);
+  transition: background-color 150ms cubic-bezier(0.2, 0, 0, 1), transform 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+.icon-btn:hover {
+  background-color: var(--surfaceAlt);
+}
+.icon-btn:active {
+  transform: scale(0.96);
+}
+
+/* Page Container */
+.page {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 32px;
+}
+
+/* Hero Card */
+.hero-card {
+  height: 180px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero-card .title {
+  color: #fff;
+  z-index: 2;
+  margin-top: 16px;
+}
+
+@keyframes orbit {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.orbit-svg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+  width: 100px;
+  height: 100px;
+  animation: orbit 3s linear infinite;
+}
+
+/* Counter Row */
+.counter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+.counter-label {
+  display: flex;
+  flex-direction: column;
+}
+.fab {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background-color: var(--primary);
+  color: var(--onPrimary);
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+.fab:active {
+  transform: scale(0.96);
+}
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+  100% { transform: translateX(0); }
+}
+.shake {
+  animation: shake 100ms ease-in-out 3;
+}
+
+/* Controls Card */
+.controls-card {
+  background-color: var(--surface);
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chip-row {
+  display: flex;
+  gap: 8px;
+}
+.chip {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--outline);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 150ms cubic-bezier(0.2, 0, 0, 1),
+              color 150ms cubic-bezier(0.2, 0, 0, 1),
+              border-color 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+.chip.selected {
+  background-color: var(--primary);
+  color: var(--onPrimary);
+  border-color: var(--primary);
+}
+
+/* Input */
+.input-container {
+  position: relative;
+  margin-top: 8px;
+}
+.input-container input {
+  width: 100%;
+  height: 56px;
+  border-radius: 14px;
+  border: 1px solid var(--outline);
+  padding: 16px;
+  font-family: inherit;
+  font-size: 16px;
+  background-color: var(--surface);
+  color: var(--text);
+  outline: none;
+  transition: border-color 150ms cubic-bezier(0.2, 0, 0, 1),
+              border-width 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+.input-container input:focus {
+  border: 2px solid var(--primary);
+}
+.input-label {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  color: var(--textMuted);
+  pointer-events: none;
+  transition: transform 150ms cubic-bezier(0.2, 0, 0, 1),
+              font-size 150ms cubic-bezier(0.2, 0, 0, 1),
+              top 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+.input-container input:focus + .input-label,
+.input-container input:not(:placeholder-shown) + .input-label {
+  top: -8px;
+  left: 12px;
+  font-size: 12px;
+  background-color: var(--background);
+  padding: 0 4px;
+  color: var(--primary);
+}
+
+/* List Item */
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: background-color 150ms cubic-bezier(0.2, 0, 0, 1);
+}
+.list-item:hover {
+  background-color: var(--surfaceAlt);
+}
+.item-thumb {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  margin-right: 16px;
+}
+.item-content {
+  flex: 1;
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.stagger-item {
+  animation: slideUpFade 500ms cubic-bezier(0.05, 0.7, 0.1, 1) both;
+}
+
+/* Transitions */
+.fade-in {
+  animation: fadeIn 300ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 32px;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.slider-toggle {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--outline);
+  transition: .3s;
+  border-radius: 34px;
+}
+.slider-toggle:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+input:checked + .slider-toggle {
+  background-color: var(--primary);
+}
+input:checked + .slider-toggle:before {
+  transform: translateX(20px);
+}
+
+/* Dialog / Modal */
+dialog {
+  padding: 0;
+  border: none;
+  border-radius: 28px;
+  background-color: var(--surface);
+  color: var(--text);
+  box-shadow: 0 8px 24px rgba(0,0,0,.16);
+  max-width: 90%;
+  width: 320px;
+}
+dialog::backdrop {
+  background: rgba(0,0,0,0.4);
+}
+.dialog-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--primary);
+  padding: 8px 16px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 150ms;
+}
+.btn-text:hover { background-color: var(--surfaceAlt); }
+
+/* Bottom Sheet */
+.sheet-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.sheet-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.sheet-content {
+  background: var(--surface);
+  border-radius: 28px 28px 0 0;
+  padding: 16px 24px 32px 24px;
+  transform: translateY(100%);
+  transition: transform 300ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.sheet-overlay.open .sheet-content {
+  transform: translateY(0);
+}
+.sheet-handle {
+  width: 32px;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--outline);
+  margin: 0 auto 16px auto;
+}
+
+/* Toast */
+.toast-container {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--surfaceAlt);
+  color: var(--text);
+  padding: 12px 24px;
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  z-index: 200;
+  transition: transform 300ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.toast-container.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Swipe list */
+.swipe-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.swipe-item-container {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background-color: #E5484D;
+}
+.swipe-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 16px;
+  color: white;
+}
+.swipe-item {
+  position: relative;
+  background-color: var(--surface);
+  padding: 16px;
+  border-radius: 16px;
+  transition: transform 0ms;
+}
+.swipe-item.settling {
+  transition: transform 300ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.swipe-item-container.dismissed {
+  animation: collapseHeight 300ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+@keyframes collapseHeight {
+  from { height: 56px; opacity: 1; margin-bottom: 8px; }
+  to { height: 0px; opacity: 0; margin-bottom: 0px; }
+}

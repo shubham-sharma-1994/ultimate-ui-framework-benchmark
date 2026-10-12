@@ -1,0 +1,11 @@
+[application]
+name = "dioxus_app"
+default_platform = "web"
+out_dir = "dist"
+asset_dir = "assets"
+
+[web.app]
+title = "Pulse"
+
+[web.watcher]
+watch_dir = ["src", "assets"]

@@ -1,0 +1,25 @@
+[package]
+name = "dioxus_app"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+dioxus-logger = "0.6.2"
+gloo-timers = { version = "0.4.0", features = ["futures"] }
+log = "0.4.34"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+
+[dependencies.web-sys]
+version = "0.3.106"
+features = ["Window", "Location", "HtmlDocument", "Element", "Node"]
+
+[target.'cfg(target_arch = "wasm32")'.dependencies.dioxus]
+version = "0.6.3"
+default-features = false
+features = ["web", "router", "macro", "hooks", "signals", "html", "document", "launch"]
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies.dioxus]
+version = "0.6.3"
+default-features = false
+features = ["desktop", "router", "macro", "hooks", "signals", "html", "document", "launch"]
