@@ -21,7 +21,16 @@ jobs:
         with:
           version: 3.1.25
           actions-cache-folder: 'emsdk-cache'
-      - name: Install Qt
+      - name: Install Qt (Desktop)
+        uses: jurplel/install-qt-action@v3
+        with:
+          version: '6.5.3'
+          host: 'linux'
+          target: 'desktop'
+          arch: 'gcc_64'
+          cache: true
+          dir: '${{ github.workspace }}/Qt'
+      - name: Install Qt (Wasm)
         uses: jurplel/install-qt-action@v3
         with:
           version: '6.5.3'
@@ -29,12 +38,15 @@ jobs:
           target: 'desktop'
           arch: 'wasm_32'
           cache: true
+          dir: '${{ github.workspace }}/Qt'
+      - name: Install Ninja
+        run: sudo apt-get update && sudo apt-get install -y ninja-build
       - name: Build WebAssembly
         working-directory: apps/qt
         run: |
           mkdir build && cd build
-          qt-cmake -DCMAKE_BUILD_TYPE=Release ..
-          make -j$(nproc)
+          qt-cmake -DCMAKE_BUILD_TYPE=Release -GNinja ..
+          cmake --build .
       - name: Upload Web Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -52,12 +64,10 @@ jobs:
           version: 3.1.25
           actions-cache-folder: 'emsdk-cache'
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '17'
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v2
       - name: Install Qt
         uses: jurplel/install-qt-action@v3
         with:
@@ -70,9 +80,9 @@ jobs:
         working-directory: apps/qt
         run: |
           mkdir build && cd build
-          qt-cmake -DCMAKE_BUILD_TYPE=Release -DQT_ANDROID_ABIS="armeabi-v7a;arm64-v8a" ..
-          make -j$(nproc)
-          make apk
+          qt-cmake -DCMAKE_BUILD_TYPE=Release -GNinja -DQT_ANDROID_ABIS="armeabi-v7a;arm64-v8a" ..
+          ninja
+          cmake --build . --target apk
         continue-on-error: true
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
