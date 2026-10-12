@@ -4,17 +4,6 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
-    <Color x:Key="BackgroundColor">{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}</Color>
-    <Color x:Key="SurfaceColor">{AppThemeBinding Light={StaticResource LightSurface}, Dark={StaticResource DarkSurface}}</Color>
-    <Color x:Key="SurfaceAltColor">{AppThemeBinding Light={StaticResource LightSurfaceAlt}, Dark={StaticResource DarkSurfaceAlt}}</Color>
-    <Color x:Key="PrimaryColor">{AppThemeBinding Light={StaticResource LightPrimary}, Dark={StaticResource DarkPrimary}}</Color>
-    <Color x:Key="OnPrimaryColor">{AppThemeBinding Light={StaticResource LightOnPrimary}, Dark={StaticResource DarkOnPrimary}}</Color>
-    <Color x:Key="AccentColor">{AppThemeBinding Light={StaticResource LightAccent}, Dark={StaticResource DarkAccent}}</Color>
-    <Color x:Key="TextColor">{AppThemeBinding Light={StaticResource LightText}, Dark={StaticResource DarkText}}</Color>
-    <Color x:Key="TextMutedColor">{AppThemeBinding Light={StaticResource LightTextMuted}, Dark={StaticResource DarkTextMuted}}</Color>
-    <Color x:Key="OutlineColor">{AppThemeBinding Light={StaticResource LightOutline}, Dark={StaticResource DarkOutline}}</Color>
-    <Color x:Key="SuccessColor">{AppThemeBinding Light={StaticResource LightSuccess}, Dark={StaticResource DarkSuccess}}</Color>
-
     <!-- Grid / Spacing -->
     <Thickness x:Key="Spacing4">4</Thickness>
     <Thickness x:Key="Spacing8">8</Thickness>

@@ -207,6 +207,7 @@ public partial class MainPage : ContentPage
     {
         _isDarkTheme = !_isDarkTheme;
         Application.Current.UserAppTheme = _isDarkTheme ? AppTheme.Dark : AppTheme.Light;
+        AppThemeHelper.ApplyTheme(Application.Current.UserAppTheme);
 
         // Rotate and crossfade icon
         await ThemeToggle.FadeTo(0, 150);
