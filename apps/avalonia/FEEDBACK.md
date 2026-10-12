@@ -25,3 +25,9 @@ Building the Pulse app in Avalonia UI highlighted the framework's strengths as a
 - XAML can be verbose.
 - Lack of built-in modern, mobile-first gesture and layout choreography (hero transitions, advanced scroll-linking, physics-based springs).
 - Steep learning curve for extending controls or writing complex behaviors from scratch compared to declarative UI frameworks.
+
+## Round 2
+- Adding the Android target was simply a matter of making sure the `Pulse.Android.csproj` file and workloads were available. No codebase changes were needed specifically for cross-platform compatibility as Avalonia's controls abstract the windowing logic effectively.
+- Animations in Avalonia (C03, C06, C07) are quite manual. While `TransitioningContentControl` helps with basic page slides or property switches (C06), more complex chained or staggered animations require significant code-behind (C03) or complex Behaviors that aren't available out of the box in the core framework.
+- There is a noticeable lack of implicit layout animations or easy declarative chained timeline animations, forcing developers to resort to `Task.Delay` or event handler-based code-behind loops to achieve modern motion design.
+- The `ScrollViewer` pointer events (for C09 parallax) work smoothly, and tracking pointer movements for the draggable card (C07) is straightforward using the standard pointer event handlers.
