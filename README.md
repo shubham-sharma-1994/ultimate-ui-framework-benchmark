@@ -4,9 +4,31 @@ One small, fully specified **2-page app ("Pulse")**, built identically in 14 mai
 **look, feel, animation, transition and interaction quality** and **runtime performance** can be compared side by side
 on **Web, Android and Windows**.
 
-> Status: ✅ all 14 apps built and merged · ⏳ visual testing & benchmarking results pending (tables below to be filled in).
+> Status: ✅ all 14 apps built and merged · 📦 [latest build release](https://github.com/shubham-sharma-1994/ultimate-ui-framework-benchmark/releases/tag/builds-20261013-0519) · ⏳ visual testing & benchmarking results pending (tables below to be filled in).
 > This is a public, good-faith comparison. If a framework can't do something out of the box, the feature is **skipped
 > with a note**, never faked. Corrections and PRs are welcome.
+
+## Download the builds
+Latest bundle: **[`builds-20261013-0519`](https://github.com/shubham-sharma-1994/ultimate-ui-framework-benchmark/releases/tag/builds-20261013-0519)** (pre-release, built from CI on 13 Oct 2026). Each asset is a zipped CI artifact named `<framework>-<platform>`; unzip it, then install the APK (Android) or run the app (Windows) or serve the folder (Web).
+The table below shows what is **actually in that release**; a ❌ means CI did not produce that artifact yet (not investigated), so there is nothing to download.
+
+### Android: install them all side by side
+Every Android app has its own package ID and launcher name, and all APKs are signed with one shared debug key, so you can install all of them at once and compare. **Uninstall older builds first** (an old APK signed with a different key blocks the update). Not yet verified on a physical device except where noted in each `NOTES.md`.
+
+| Framework | Package ID | Launcher name | In release |
+|---|---|---|---|
+| Flutter | `dev.pulse.flutter` | Pulse Flutter | ✅ |
+| React Native | `dev.pulse.reactnative` | Pulse React Native | ✅ |
+| Ionic | `dev.pulse.ionic` | Pulse Ionic | ✅ |
+| Compose Multiplatform | `dev.pulse.compose` | Pulse Compose | ✅ |
+| .NET MAUI | `dev.pulse.maui` | Pulse MAUI | ✅ |
+| Fyne | `dev.pulse.fyne` | pulse-fyne | ✅ |
+| Slint | `dev.pulse.slint` | Pulse Slint | ✅ (renders on emulator, phone test pending) |
+| Uno Platform | `dev.pulse.uno` | Pulse Uno | ❌ no APK produced |
+| Avalonia | `dev.pulse.avalonia` | Pulse Avalonia | ❌ no APK produced |
+| Qt | `dev.pulse.qt` | (Qt default) | ❌ no APK produced |
+| Quasar | `dev.pulse.quasar` | Pulse Quasar | ❌ no APK produced |
+| Tauri | `dev.pulse.tauri` | appstauri | ❌ no APK produced |
 
 ## The app
 Page 1 *Showcase*: gradient hero with a custom-painted orbit, animated counter, controls (switch, slider, chips), floating-label
@@ -19,26 +41,26 @@ CI rules: [`spec/CI.md`](spec/CI.md) · shared data: [`spec/data.json`](spec/dat
 
 ## Frameworks & targets — build status
 All 14 apps are built and merged (two rounds). Each app's `NOTES.md` is the source of truth; this table is generated from them.
-Targets: ✅ built · ⚠️ partial / experimental (CI job marked non-blocking) · ⏭️ skipped (see the note). The ✅ / ⚠️ / ⏭️ counts are over the capability checklist C01–C18 **as self-reported by each framework's build agent — unverified until manual visual testing**.
+Targets: ✅ built and present in the latest release · ❌ not in the latest release (CI produced no artifact; not yet investigated) · ⚠️ partial / experimental (CI job marked non-blocking) · ⏭️ skipped (see the note). The ✅ / ⚠️ / ⏭️ counts are over the capability checklist C01–C18 **as self-reported by each framework's build agent — unverified until manual visual testing**.
 
 > ⚠️ **Dioxus:** the round-1 app that was first merged was only a stub (`println!("Hello, world!")`) although its notes claimed 12/18. Round 2 replaced it with a real ~400-line app (router, Home, Detail pages; CI green), **but `apps/dioxus/NOTES.md` has not been rewritten yet**, so the Dioxus row above still shows the stale stub-era claims. Do not trust it.
 
 | Framework | Folder | Web | Android | Windows | ✅ | ⚠️ | ⏭️ | Docs |
 |---|---|---|---|---|---|---|---|---|
-| Flutter | `apps/flutter` | ✅ | ✅ | ✅ | 18 | 0 | 0 | [NOTES](apps/flutter/NOTES.md) · [FEEDBACK](apps/flutter/FEEDBACK.md) |
+| Flutter | `apps/flutter` | ✅ | ✅ | ❌ | 18 | 0 | 0 | [NOTES](apps/flutter/NOTES.md) · [FEEDBACK](apps/flutter/FEEDBACK.md) |
 | React Native | `apps/react-native` | ✅ | ✅ | ⏭️ | 15 | 3 | 0 | [NOTES](apps/react-native/NOTES.md) · [FEEDBACK](apps/react-native/FEEDBACK.md) |
 | Ionic | `apps/ionic` | ✅ | ✅ | ✅ | 15 | 3 | 0 | [NOTES](apps/ionic/NOTES.md) · [FEEDBACK](apps/ionic/FEEDBACK.md) |
-| Uno Platform | `apps/uno` | ✅ | ✅ | ✅ | 12 | 5 | 1 | [NOTES](apps/uno/NOTES.md) · [FEEDBACK](apps/uno/FEEDBACK.md) |
-| Compose Multiplatform | `apps/compose` | ✅ | ✅ | ✅ | 16 | 2 | 0 | [NOTES](apps/compose/NOTES.md) · [FEEDBACK](apps/compose/FEEDBACK.md) |
-| Avalonia | `apps/avalonia` | ✅ | ✅ | ✅ | 10 | 6 | 2 | [NOTES](apps/avalonia/NOTES.md) · [FEEDBACK](apps/avalonia/FEEDBACK.md) |
-| Qt (QML) | `apps/qt` | ⚠️ | ✅ | ✅ | 12 | 6 | 0 | [NOTES](apps/qt/NOTES.md) · [FEEDBACK](apps/qt/FEEDBACK.md) |
+| Uno Platform | `apps/uno` | ❌ | ❌ | ❌ | 12 | 5 | 1 | [NOTES](apps/uno/NOTES.md) · [FEEDBACK](apps/uno/FEEDBACK.md) |
+| Compose Multiplatform | `apps/compose` | ✅ | ✅ | ❌ | 16 | 2 | 0 | [NOTES](apps/compose/NOTES.md) · [FEEDBACK](apps/compose/FEEDBACK.md) |
+| Avalonia | `apps/avalonia` | ✅ | ❌ | ✅ | 10 | 6 | 2 | [NOTES](apps/avalonia/NOTES.md) · [FEEDBACK](apps/avalonia/FEEDBACK.md) |
+| Qt (QML) | `apps/qt` | ⚠️ | ❌ | ❌ | 12 | 6 | 0 | [NOTES](apps/qt/NOTES.md) · [FEEDBACK](apps/qt/FEEDBACK.md) |
 | .NET MAUI | `apps/maui` | ⏭️ | ✅ | ✅ | 5 | 13 | 0 | [NOTES](apps/maui/NOTES.md) · [FEEDBACK](apps/maui/FEEDBACK.md) |
-| Dioxus ⚠️ | `apps/dioxus` | ✅ | ⏭️ | ✅ | 12 | 6 | 0 | [NOTES](apps/dioxus/NOTES.md) · [FEEDBACK](apps/dioxus/FEEDBACK.md) |
+| Dioxus ⚠️ | `apps/dioxus` | ❌ | ⏭️ | ✅ | 12 | 6 | 0 | [NOTES](apps/dioxus/NOTES.md) · [FEEDBACK](apps/dioxus/FEEDBACK.md) |
 | Fyne | `apps/fyne` | ⚠️ | ✅ | ✅ | 1 | 9 | 8 | [NOTES](apps/fyne/NOTES.md) · [FEEDBACK](apps/fyne/FEEDBACK.md) |
-| Tauri | `apps/tauri` | ✅ | ⚠️ | ✅ | 16 | 2 | 0 | [NOTES](apps/tauri/NOTES.md) · [FEEDBACK](apps/tauri/FEEDBACK.md) |
+| Tauri | `apps/tauri` | ✅ | ❌ | ✅ | 16 | 2 | 0 | [NOTES](apps/tauri/NOTES.md) · [FEEDBACK](apps/tauri/FEEDBACK.md) |
 | Slint | `apps/slint` | ✅ | ✅ | ✅ | 4 | 10 | 4 | [NOTES](apps/slint/NOTES.md) · [FEEDBACK](apps/slint/FEEDBACK.md) |
 | Electron | `apps/electron` | ✅ | ⏭️ | ✅ | 16 | 2 | 0 | [NOTES](apps/electron/NOTES.md) · [FEEDBACK](apps/electron/FEEDBACK.md) |
-| Quasar | `apps/quasar` | ✅ | ✅ | ✅ | 18 | 0 | 0 | [NOTES](apps/quasar/NOTES.md) · [FEEDBACK](apps/quasar/FEEDBACK.md) |
+| Quasar | `apps/quasar` | ✅ | ❌ | ✅ | 18 | 0 | 0 | [NOTES](apps/quasar/NOTES.md) · [FEEDBACK](apps/quasar/FEEDBACK.md) |
 
 CI: every framework has `.github/workflows/<fw>.yml`; artifacts are `<fw>-web`, `<fw>-android`, `<fw>-windows` (see [`spec/CI.md`](spec/CI.md)). Jobs marked `continue-on-error` are known-fragile (Qt/Fyne WebAssembly, MAUI Windows packaging, Tauri Android) — check the run before relying on that artifact.
 
@@ -54,14 +76,14 @@ Rule added to [`spec/COMPAT.md`](spec/COMPAT.md): skip a hard *feature*, not the
 | Uno | Real Composition spring + number-switcher animations | Animated theme switch (C14) skipped |
 | MAUI | Hover/keyboard handling, hero overlay, tick-based spring | Web (no target); Windows CI non-blocking |
 | Dioxus | Full app replaced the stub | NOTES.md not rewritten; Android not confirmed |
-| Slint | – (session produced no PR; Android done by hand, built in CI, untested on device) | Real dialogs/sheets, web deep link, test IDs, hero flight |
+| Slint | – (session produced no PR). Android done by hand: renders on the CI emulator (software renderer; the blank-screen bug was page components collapsing to 0x0), phone test pending | Real dialogs/sheets, web deep link, test IDs, hero flight |
 | Fyne | – (session failed twice) | Staggered list, number switcher, shimmer, spring, swipe, parallax, hero, deep link |
 
 Still skipped by design (whole platform): MAUI Web, Electron Android, React Native Windows.
 
 ## Artifacts
 Every workflow uploads `<fw>-web`, `<fw>-android` (APK) and `<fw>-windows` (zip) as GitHub Actions artifacts
-(see [`spec/CI.md`](spec/CI.md)). Download them from the **Actions** tab to test on your own device.
+(see [`spec/CI.md`](spec/CI.md)). Download them from the **Actions** tab, or grab everything at once from the [latest release](https://github.com/shubham-sharma-1994/ultimate-ui-framework-benchmark/releases/tag/builds-20261013-0519).
 
 ## How to test (manual protocol)
 1. Same device, same OS build, power-saver off, release builds only, 3 cold runs each.
