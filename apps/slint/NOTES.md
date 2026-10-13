@@ -5,7 +5,7 @@ Version used: 1.8.0 · Language: Rust · Rendering model: own canvas (Femtovg / 
 | Target | Status | Notes |
 |---|---|---|
 | Web | ✅ | Compiled to WASM via `cargo build --target wasm32-unknown-unknown` |
-| Android | ✅ | Built in CI (arm64 APK, debug-signed release) with `cargo-apk` + Slint `backend-android-activity-06`; app lives in `src/lib.rs` (`android_main` entry). **Built only: not yet run on a device/emulator, so every capability above is unverified on mobile** (touch drag C08, IME/text field C15, safe-area/status-bar, and performance in particular). |
+| Android | ✅ | Built in CI (arm64 APK, signed with a shared debug key) with `cargo-apk` + Slint `backend-android-activity-06`, **software renderer** on Android. CI also boots an x86_64 emulator, launches the app and checks the screenshot has real UI (`android-smoke` job). Renders on the emulator; on-device touch behaviour and performance not yet verified. |
 | Windows | ✅ | Compiled to native Windows executable. |
 
 ## Capabilities (see spec/DESIGN.md §9)
@@ -41,3 +41,8 @@ Version used: 1.8.0 · Language: Rust · Rendering model: own canvas (Femtovg / 
 - Native: `cargo run --release`
 - Build Windows (cross/native): `cargo build --release`
 - Build Web: Install `wasm-pack`, then `wasm-pack build --target web`
+
+## Android / rendering notes
+- **Components need an explicit size.** `Page1`/`Page2` (roots without a base element) collapsed to 0x0 inside a plain `Rectangle`, so only the window background drew (a blank screen). Fixed with `width: parent.width; height: parent.height` in `ui/main.slint`.
+- Page 2 is hidden (`visible`) when not shown so its Flickable does not swallow taps meant for page 1; an opaque backdrop stops page 1 showing through.
+- Debug loop: `cargo run --release --example snapshot` renders the UI headlessly with the software renderer and prints a coarse picture (`PAGE=2` for page 2).
