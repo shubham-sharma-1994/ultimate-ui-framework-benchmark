@@ -18,6 +18,11 @@ fn main() {
     let window = MinimalSoftwareWindow::new(RepaintBufferType::NewBuffer);
     slint::platform::set_platform(Box::new(P(window.clone()))).unwrap();
     let app = pulse_slint::build_app();
+    if std::env::var("PAGE").as_deref() == Ok("2") {
+        use slint::Model;
+        app.set_selected_item(app.get_items().row_data(0).unwrap());
+        app.set_current_page(2);
+    }
     window.set_size(PhysicalSize::new(w, h));
     app.show().unwrap();
     slint::platform::update_timers_and_animations();

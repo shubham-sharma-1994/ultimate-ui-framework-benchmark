@@ -42,6 +42,16 @@ export component App inherits Window {
             animate opacity, x { duration: Tokens.base; }
         }
 
+        // Opaque backdrop for page 2 so page 1 does not show through; hidden (and not hit-testable) when page 2 is away.
+        backdrop2 := Rectangle {
+            width: parent.width;
+            height: parent.height;
+            background: Tokens.active-background;
+            opacity: page2.opacity;
+            visible: page2.visible;
+            x: page2.x;
+        }
+
         page2 := Page2 {
             width: parent.width;
             height: parent.height;
@@ -49,6 +59,7 @@ export component App inherits Window {
             back-tapped => { root.back-tapped(); }
 
             opacity: root.current-page == 2 ? 1.0 : 0.0;
+            visible: root.current-page == 2 || self.opacity > 0.01;
             x: root.current-page == 2 ? 0px : root.width * 0.3;
             animate opacity, x { duration: Tokens.base; }
         }
