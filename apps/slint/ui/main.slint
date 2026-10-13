@@ -30,6 +30,8 @@ export component App inherits Window {
 
         // Simple page transition: page 2 slides in from right, page 1 fades
         page1 := Page1 {
+            width: parent.width;
+            height: parent.height;
             items: root.items;
             taps: root.taps;
             theme-toggled => { root.theme-toggled(); }
@@ -41,6 +43,8 @@ export component App inherits Window {
         }
 
         page2 := Page2 {
+            width: parent.width;
+            height: parent.height;
             item: root.selected-item;
             back-tapped => { root.back-tapped(); }
 

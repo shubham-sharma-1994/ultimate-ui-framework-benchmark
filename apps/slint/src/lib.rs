@@ -29,7 +29,7 @@ fn parse_color(hex: &str) -> Color {
     Color::from_rgb_u8(r, g, b)
 }
 
-pub fn run() {
+pub fn build_app() -> App {
     let app = App::new().unwrap();
 
     let data_str = include_str!("../assets/data.json");
@@ -78,7 +78,11 @@ pub fn run() {
         }
     });
 
-    app.run().unwrap();
+    app
+}
+
+pub fn run() {
+    build_app().run().unwrap();
 }
 
 #[cfg(target_os = "android")]
