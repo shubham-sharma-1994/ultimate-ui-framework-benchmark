@@ -22,7 +22,7 @@ Every Android app has its own package ID and launcher name, and all APKs are sig
 | Ionic | `dev.pulse.ionic` | Pulse Ionic | ✅ |
 | Compose Multiplatform | `dev.pulse.compose` | Pulse Compose | ✅ |
 | .NET MAUI | `dev.pulse.maui` | Pulse MAUI | ✅ |
-| Fyne | `dev.pulse.fyne` | pulse-fyne | ✅ |
+| Fyne | `dev.pulse.fyne` | (Fyne default) | ✅ |
 | Slint | `dev.pulse.slint` | Pulse Slint | ✅ (renders on emulator, phone test pending) |
 | Uno Platform | `dev.pulse.uno` | Pulse Uno | ❌ no APK produced |
 | Avalonia | `dev.pulse.avalonia` | Pulse Avalonia | ❌ no APK produced |
