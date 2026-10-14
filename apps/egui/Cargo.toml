@@ -1,0 +1,46 @@
+[package]
+name = "pulse-egui"
+version = "0.1.0"
+edition = "2024"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[[bin]]
+name = "pulse-egui"
+path = "src/main.rs"
+
+[dependencies]
+egui = "0.36.2"
+egui_demo_lib = "0.36.2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+log = "0.4"
+
+[target.'cfg(not(target_os = "android"))'.dependencies]
+eframe = { version = "0.36.2", default-features = true }
+
+[target.'cfg(target_os = "android")'.dependencies]
+eframe = { version = "0.36.2", default-features = true, features = ["android-native-activity"] }
+android_logger = "0.15"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+web-sys = { version = "0.3", features = ["Window", "Location", "History"] }
+
+[package.metadata.android]
+package = "dev.pulse.egui"
+build_targets = ["aarch64-linux-android"]
+apk_name = "pulse-egui"
+
+[package.metadata.android.sdk]
+min_sdk_version = 24
+target_sdk_version = 34
+
+[package.metadata.android.application]
+label = "Pulse egui"
+
+[package.metadata.android.signing.release]
+path = "debug.keystore"
+keystore_password = "android"
